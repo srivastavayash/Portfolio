@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Yash Srivastava — Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #090909;
+    --bg2:      #0f0f0f;
+    --bg3:      #141414;
+    --border:   #1e1e1e;
+    --green:    #00ff88;
+    --green2:   #00cc6a;
+    --white:    #f2f2f2;
+    --muted:    #666;
+    --muted2:   #444;
+    --red:      #ff4444;
+    --yellow:   #ffcc00;
+    --mono:     'Space Mono', monospace;
+    --sans:     'DM Sans', sans-serif;
+    --display:  'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: difference;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,255,136,.35);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .08s linear, width .2s, height .2s, opacity .2s;
+  }
+  body:hover #cursor { opacity:1; }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:9997;
+    opacity:.4;
+  }
+
+  /* ── SCANLINES ── */
+  body::after {
+    content:'';
+    position:fixed;
+    inset:0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.03) 2px,
+      rgba(0,0,0,.03) 4px
+    );
+    pointer-events:none;
+    z-index:9996;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s, backdrop-filter .3s;
+  }
+  nav.scrolled {
+    border-color: var(--border);
+    background: rgba(9,9,9,.85);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: .05em;
+  }
+  .nav-logo span { color: var(--muted); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    transition: color .2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: var(--green);
+    transition: width .25s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 0;
+    max-width: 100%;
+    padding-left: 48px;
+    padding-right: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp .6s forwards .2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--green);
+  }
+
+  .hero-name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(56px, 9vw, 130px);
+    line-height: .92;
+    letter-spacing: -.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp .7s forwards .35s;
+  }
+  .hero-name .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242,242,242,.3);
+    display: block;
+  }
+
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(12px, 1.4vw, 16px);
+    color: var(--muted);
+    margin-top: 36px;
+    max-width: 520px;
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp .6s forwards .55s;
+  }
+  .hero-title strong { color: var(--white); font-weight: 400; }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp .6s forwards .7s;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 28px;
+    border: 1px solid var(--green);
+    color: var(--bg);
+    background: var(--green);
+    transition: background .2s, color .2s, transform .15s;
+    display: inline-block;
+  }
+  .btn:hover { background: var(--green2); transform: translateY(-2px); }
+  .btn.outline {
+    background: transparent;
+    color: var(--white);
+    border-color: var(--border);
+  }
+  .btn.outline:hover { border-color: var(--white); background: transparent; }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp .6s forwards .9s;
+  }
+  .stat-num {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 36px;
+    color: var(--green);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    right: 48px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted2);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--green);
+  }
+  .section-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin-bottom: 64px;
+  }
+  .section-title em {
+    font-style: normal;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242,242,242,.25);
+  }
+
+  /* ── ABOUT ── */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .about-text {
+    font-size: 16px;
+    line-height: 1.85;
+    color: #aaa;
+  }
+  .about-text p + p { margin-top: 20px; }
+  .about-text strong { color: var(--white); font-weight: 500; }
+
+  .about-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--green), transparent);
+  }
+  .about-card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .about-card-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .about-card-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #888;
+  }
+  .about-card-item::before {
+    content: '→';
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  /* ── STACK ── */
+  #stack .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .stack-chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .08em;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s, color .2s, transform .2s;
+    cursor: default;
+  }
+  .stack-chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,255,136,.06), transparent);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .stack-chip:hover {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-3px);
+  }
+  .stack-chip:hover::before { opacity: 1; }
+  .stack-chip .chip-tag {
+    font-size: 9px;
+    color: var(--muted2);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: .1em;
+  }
+
+  /* ── PROJECTS ── */
+  #projects .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .project-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color .25s;
+  }
+  .project-item:hover { border-color: rgba(0,255,136,.3); }
+
+  .project-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted2);
+    letter-spacing: .08em;
+    width: 28px;
+  }
+
+  .project-header-content { flex: 1; }
+
+  .project-name {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    transition: color .2s;
+  }
+  .project-item:hover .project-name { color: var(--green); }
+
+  .project-tagline {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    letter-spacing: .05em;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .project-toggle {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--muted2);
+    width: 28px;
+    text-align: center;
+    transition: transform .3s, color .2s;
+  }
+  .project-item.open .project-toggle {
+    transform: rotate(45deg);
+    color: var(--green);
+  }
+
+  .project-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s cubic-bezier(.4,0,.2,1);
+  }
+  .project-item.open .project-body { max-height: 1000px; }
+
+  .project-body-inner {
+    padding: 0 32px 32px 32px;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+  }
+
+  .project-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .project-bullets li {
+    font-size: 14px;
+    color: #999;
+    line-height: 1.7;
+    padding-left: 20px;
+    position: relative;
+  }
+  .project-bullets li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 16px;
+  }
+  .project-bullets li strong { color: var(--white); font-weight: 500; }
+
+  .project-sidebar {}
+  .project-sidebar-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+  .project-sidebar-block:last-child { margin-bottom: 0; }
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sidebar-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #888;
+    line-height: 1.8;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    border-top: 1px solid var(--border);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .contact-big {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(36px, 6vw, 80px);
+    line-height: .95;
+    letter-spacing: -.03em;
+  }
+  .contact-big span { color: var(--green); }
+  .contact-sub {
+    font-size: 15px;
+    color: var(--muted);
+    margin-top: 20px;
+    line-height: 1.7;
+    font-family: var(--mono);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    background: var(--bg2);
+    transition: border-color .2s, background .2s, transform .15s;
+    group: true;
+  }
+  .contact-link:hover {
+    border-color: var(--green);
+    background: rgba(0,255,136,.04);
+    transform: translateX(4px);
+  }
+  .contact-link-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contact-link-value {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .contact-link-arrow {
+    color: var(--green);
+    font-size: 18px;
+    transition: transform .2s;
+  }
+  .contact-link:hover .contact-link-arrow { transform: translateX(4px); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+  }
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted2);
+    letter-spacing: .08em;
+  }
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted2);
+    letter-spacing: .08em;
+  }
+  .footer-right span { color: var(--green); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: .3; }
+    50% { opacity: .8; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--green);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── REVEAL ON SCROLL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .7s, transform .7s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ── DIVIDER LINE ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 48px;
+    width: calc(100% - 96px);
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    margin: 0;
+    background: var(--bg2);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    animation: marquee 22s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track span {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted2);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .marquee-track span.accent { color: var(--green); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* mobile */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    #hero { padding-left: 24px; padding-right: 24px; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    #about .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .project-body-inner { grid-template-columns: 1fr; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Nav -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">YS<span>.dev</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+
+  <div class="hero-eyebrow">Full Stack Developer · Delhi, India</div>
+
+  <h1 class="hero-name">
+    Yash<br>
+    <span class="line2">Srivastava</span>
+  </h1>
+
+  <p class="hero-title">
+    Building <strong>production-grade SaaS systems</strong> — from centralized
+    identity infrastructure to <strong>AI-powered evaluation engines</strong>.
+    Backend-heavy. Systems-first. No shortcuts.<span class="cursor-blink"></span>
+  </p>
+
+  <div class="hero-cta">
+    <a class="btn" href="#projects">View Projects</a>
+    <a class="btn outline" href="mailto:srivastavayash017@gmail.com">Get in Touch</a>
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">6+</div>
+      <div class="stat-label">Production Systems</div>
+    </div>
+    <div>
+      <div class="stat-num">1+</div>
+      <div class="stat-label">Years at RPATech</div>
+    </div>
+    <div>
+      <div class="stat-num">9.34</div>
+      <div class="stat-label">GPA · GGSIPU</div>
+    </div>
+    <div>
+      <div class="stat-num">&lt;2s</div>
+      <div class="stat-label">AI Pipeline Latency</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">Scroll Down</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>TypeScript</span><span class="accent">·</span>
+    <span>Node.js</span><span class="accent">·</span>
+    <span>PHP</span><span class="accent">·</span>
+    <span>MySQL</span><span class="accent">·</span>
+    <span>Redis</span><span class="accent">·</span>
+    <span>LLM Orchestration</span><span class="accent">·</span>
+    <span>Multi-Tenant SaaS</span><span class="accent">·</span>
+    <span>JWT · RBAC</span><span class="accent">·</span>
+    <span>Async Workers</span><span class="accent">·</span>
+    <span>OCR Pipelines</span><span class="accent">·</span>
+    <span>STT · TTS</span><span class="accent">·</span>
+    <span>Cloudflare</span><span class="accent">·</span>
+    <!-- duplicate for infinite scroll -->
+    <span>TypeScript</span><span class="accent">·</span>
+    <span>Node.js</span><span class="accent">·</span>
+    <span>PHP</span><span class="accent">·</span>
+    <span>MySQL</span><span class="accent">·</span>
+    <span>Redis</span><span class="accent">·</span>
+    <span>LLM Orchestration</span><span class="accent">·</span>
+    <span>Multi-Tenant SaaS</span><span class="accent">·</span>
+    <span>JWT · RBAC</span><span class="accent">·</span>
+    <span>Async Workers</span><span class="accent">·</span>
+    <span>OCR Pipelines</span><span class="accent">·</span>
+    <span>STT · TTS</span><span class="accent">·</span>
+    <span>Cloudflare</span><span class="accent">·</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ ABOUT ═══════════════════════════ -->
+<section id="about">
+  <div class="section-eyebrow reveal">About</div>
+  <h2 class="section-title reveal reveal-delay-1">Who I <em>Am</em></h2>
+
+  <div class="about-grid">
+    <div class="about-text reveal reveal-delay-2">
+      <p>
+        I'm a <strong>Full Stack Developer at RPATech</strong>, where I design and ship
+        production-grade SaaS platforms that actually have to work at scale — not just demo well.
+        My work spans centralized identity systems, enterprise HR automation, AI-powered
+        evaluation engines, and SLA-driven helpdesk infrastructure.
+      </p>
+      <p>
+        I think in <strong>systems, not features</strong>. Every platform I've built
+        started with schema design, failure modes, and concurrency constraints —
+        not UI mockups.
+      </p>
+      <p>
+        My backend stack centers on <strong>TypeScript/Node.js and PHP (LAMP)</strong>,
+        with MySQL and Redis as the data layer. On the AI side, I've built multi-model
+        LLM orchestration pipelines in production — not just API calls, but
+        <strong>retry logic, fallback routing, latency optimization, and structured output enforcement</strong>.
+      </p>
+      <p>
+        Currently deepening expertise in distributed systems, message queues,
+        and event-driven architecture to bridge from application engineer
+        to <strong>platform engineer</strong>.
+      </p>
+    </div>
+
+    <div class="reveal reveal-delay-3">
+      <div class="about-card" style="margin-bottom:12px;">
+        <div class="about-card-label">// Currently Working On</div>
+        <div class="about-card-items">
+          <div class="about-card-item">Authnex OAuth infrastructure</div>
+          <div class="about-card-item">HRMS v2 performance layer</div>
+          <div class="about-card-item">AI Interview scaling</div>
+          <div class="about-card-item">Message queue integration</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-label">// Education</div>
+        <div class="about-card-items">
+          <div class="about-card-item">B.Tech IT · GGSIPU Delhi</div>
+          <div class="about-card-item">GPA: 9.34 / 10</div>
+          <div class="about-card-item">2020 – 2024</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ STACK ═══════════════════════════ -->
+<section id="stack" style="background:var(--bg2); max-width:100%; padding:80px 48px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="section-eyebrow reveal">Tech Stack</div>
+    <h2 class="section-title reveal reveal-delay-1">What I <em>Build With</em></h2>
+
+    <div class="stack-grid">
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Language</span>TypeScript</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Language</span>JavaScript</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Language</span>PHP</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Language</span>Python</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Language</span>SQL</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Backend</span>Node.js</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Backend</span>REST APIs</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Backend</span>LAMP Stack</div>
+      <div class="stack-chip reveal reveal-delay-3"><span class="chip-tag">Database</span>MySQL</div>
+      <div class="stack-chip reveal reveal-delay-3"><span class="chip-tag">Cache</span>Redis</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Auth</span>JWT / OAuth 2.0</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Auth</span>RBAC</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">AI</span>OpenAI</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">AI</span>Gemini</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">AI</span>Claude</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">AI</span>Mistral</div>
+      <div class="stack-chip reveal reveal-delay-3"><span class="chip-tag">AI</span>STT / TTS</div>
+      <div class="stack-chip reveal reveal-delay-3"><span class="chip-tag">AI</span>Prompt Eng.</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Infra</span>Cloudflare</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Infra</span>Object Storage</div>
+      <div class="stack-chip reveal reveal-delay-1"><span class="chip-tag">Frontend</span>Bootstrap</div>
+      <div class="stack-chip reveal reveal-delay-2"><span class="chip-tag">Frontend</span>jQuery / AJAX</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PROJECTS ═══════════════════════════ -->
+<section id="projects">
+  <div class="section-eyebrow reveal">Projects</div>
+  <h2 class="section-title reveal reveal-delay-1">What I've <em>Built</em></h2>
+
+  <div class="projects-list">
+
+    <!-- AUTHNEX -->
+    <div class="project-item reveal">
+      <div class="project-header" onclick="toggleProject(this)">
+        <div class="project-num">01</div>
+        <div class="project-header-content">
+          <div class="project-name">Authnex</div>
+          <div class="project-tagline">Centralized Identity & Access Management Platform</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Redis</span>
+          <span class="tag">Cloudflare</span>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <ul class="project-bullets">
+            <li><strong>Centralized auth authority</strong> serving all internal SaaS products — replaced per-product login fragmentation with unified identity infrastructure.</li>
+            <li><strong>JWT + rotating refresh tokens</strong> — each token invalidated on use, preventing replay attacks. Access tokens kept intentionally short-lived.</li>
+            <li><strong>Multi-tenant RBAC</strong> via junction-table architecture — one user, multiple orgs, distinct roles per tenant. No account duplication.</li>
+            <li><strong>Hybrid session layer</strong> — Redis for sub-ms blacklist lookups + MySQL for durable persistence. Full-user session kill on suspicion.</li>
+            <li>Local JWT validation by consuming services — <strong>stateless, horizontally scalable</strong> without auth bottleneck per request.</li>
+            <li>Cloudflare deployment with IP anomaly detection, rate limiting, OAuth 2.0, and social login support.</li>
+          </ul>
+          <div class="project-sidebar">
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Stack</div>
+              <div class="sidebar-value">TypeScript · Node.js<br>MySQL · Redis<br>Cloudflare · JWT<br>OAuth 2.0</div>
+            </div>
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Highlights</div>
+              <div class="sidebar-value">Multi-tenant RBAC<br>Token rotation<br>Stateless validation<br>Blacklist caching</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HRMS -->
+    <div class="project-item reveal reveal-delay-1">
+      <div class="project-header" onclick="toggleProject(this)">
+        <div class="project-num">02</div>
+        <div class="project-header-content">
+          <div class="project-name">HRMS Platform</div>
+          <div class="project-tagline">Multi-Tenant Enterprise Workforce Management</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Redis</span>
+          <span class="tag">LAMP</span>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <ul class="project-bullets">
+            <li><strong>End-to-end workforce platform</strong> — recruitment, onboarding, attendance, leave, training, certifications, PMS, incentives, MIS reporting.</li>
+            <li><strong>Hierarchical org modeling</strong> with parent-child department schema, cycle-prevention constraints, and structural integrity enforcement.</li>
+            <li><strong>Concurrency-safe attendance</strong> — DB-level UNIQUE(employee_id, attendance_date) prevents duplicates under parallel requests. Reduced discrepancies by 20%.</li>
+            <li><strong>Multi-reviewer PMS</strong> with weighted dynamic scoring, configurable aggregation, management override, and evaluation locking.</li>
+            <li><strong>Rule-based incentive engine</strong> — formula-driven payout computation tied to PMS metrics. Rules stored as DB records for non-code updates.</li>
+            <li>Async multi-worker architecture for score aggregation, incentives, and reporting — <strong>fully decoupled from synchronous request lifecycle</strong>.</li>
+            <li>Indexed views + query tuning = <strong>~25% reduction</strong> in MIS analytics query latency.</li>
+          </ul>
+          <div class="project-sidebar">
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Stack</div>
+              <div class="sidebar-value">PHP (LAMP) · MySQL<br>Redis · jQuery<br>PHPMailer · PHPWord<br>Bootstrap</div>
+            </div>
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Modules</div>
+              <div class="sidebar-value">Recruitment · Attendance<br>Leave · Training<br>PMS · Incentives<br>MIS Reports</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI INTERVIEW -->
+    <div class="project-item reveal reveal-delay-2">
+      <div class="project-header" onclick="toggleProject(this)">
+        <div class="project-num">03</div>
+        <div class="project-header-content">
+          <div class="project-name">AI Interview Engine</div>
+          <div class="project-tagline">Autonomous Candidate Evaluation System</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">LLM Orchestration</span>
+          <span class="tag">STT/TTS</span>
+          <span class="tag">Node.js</span>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <ul class="project-bullets">
+            <li><strong>30s → &lt;2s latency</strong> — identified root cause as tight sequential STT→LLM→TTS coupling. Decoupled pipeline, async execution, parallel API orchestration.</li>
+            <li><strong>Plugin-style model abstraction</strong> — runtime switching between OpenAI, Gemini, Claude, Mistral, ElevenLabs, and self-hosted. Zero code change per swap.</li>
+            <li>Prompt orchestration with <strong>role-specific templates + incremental transcript context</strong> accumulation. Structured JSON output enforced with schema validation.</li>
+            <li><strong>Hybrid scoring engine</strong> — LLM eval + rule-based validation + weighted aggregation + confidence filtering. All async via concurrent workers.</li>
+            <li><strong>Extensible test engine</strong> — MCQ, subjective, and AI-evaluated formats. Role-based dynamic test generation.</li>
+            <li>Retry + fallback routing — provider failure triggers automatic reroute to next in priority chain.</li>
+            <li>Operable standalone via REST API or <strong>fully integrated into HRMS</strong> recruitment pipeline.</li>
+          </ul>
+          <div class="project-sidebar">
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Models Used</div>
+              <div class="sidebar-value">OpenAI · Gemini<br>Claude · Mistral<br>ElevenLabs<br>Self-hosted</div>
+            </div>
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Key Win</div>
+              <div class="sidebar-value">30s pipeline<br>optimized to<br>&lt;2s end-to-end<br>response time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HELPDESK -->
+    <div class="project-item reveal reveal-delay-3">
+      <div class="project-header" onclick="toggleProject(this)">
+        <div class="project-num">04</div>
+        <div class="project-header-content">
+          <div class="project-name">Helpdesk & SLA System</div>
+          <div class="project-tagline">Multi-Tenant Ticketing with Full Email Engine</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">IMAP/SMTP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">CDN</span>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <ul class="project-bullets">
+            <li><strong>Full IMAP integration</strong> built from scratch — inbound ingestion, threading, reply handling, archiving, bulk deletion, attachment management. Resolved real production connection instability.</li>
+            <li><strong>Multi-layer deduplication</strong> — message-id + In-Reply-To + References headers (primary), subject normalization for Re:/Fwd mutations (secondary), body validation (tertiary).</li>
+            <li><strong>Contract-based SLA engine</strong> — defined in hours per client, immutably attached at ticket creation. Timezone-aware UTC deadline computation, 24×7.</li>
+            <li>Cron-driven email-to-ticket pipeline with client-SLA routing and role-based assignment — all dedup layers applied before ticket creation.</li>
+            <li>Attachments on object storage + CDN — <strong>decoupled from DB, served from edge</strong>, linked via unique identifiers.</li>
+            <li>Transactional DB operations across creation, escalation, threading — debugged complex concurrent IMAP duplicate suppression in production.</li>
+          </ul>
+          <div class="project-sidebar">
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Stack</div>
+              <div class="sidebar-value">PHP · MySQL<br>IMAP / SMTP<br>PHPMailer<br>Object Storage + CDN</div>
+            </div>
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Hardest Part</div>
+              <div class="sidebar-value">IMAP thread<br>reconstruction +<br>3-layer email<br>deduplication</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCXTRACTOR -->
+    <div class="project-item reveal reveal-delay-4">
+      <div class="project-header" onclick="toggleProject(this)">
+        <div class="project-num">05</div>
+        <div class="project-header-content">
+          <div class="project-name">DocXtractor</div>
+          <div class="project-tagline">Hybrid AI Document Extraction Pipeline</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Multi-model AI</span>
+          <span class="tag">OCR</span>
+          <span class="tag">Async Workers</span>
+        </div>
+        <div class="project-toggle">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <ul class="project-bullets">
+            <li><strong>Multi-model abstraction</strong> — Gemini, OpenAI, Claude, Mistral, self-hosted vision models. Same plugin pattern as AI Interview engine.</li>
+            <li><strong>Hybrid extraction</strong> — LLM semantic parsing for unstructured content + regex/rule-based deterministic validation for structured fields (PAN, GSTIN, invoice numbers).</li>
+            <li>Document-type templating — classified on ingestion, routed to <strong>per-template prompt + validation schema</strong>.</li>
+            <li>Structured JSON normalization enforced at pipeline exit for <strong>reliable downstream integration</strong>.</li>
+            <li><strong>Async concurrent worker pipeline</strong> — bulk uploads processed in parallel. Synchronous request threads never blocked.</li>
+          </ul>
+          <div class="project-sidebar">
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Stack</div>
+              <div class="sidebar-value">PHP · MySQL<br>OpenAI · Gemini<br>Claude · Mistral<br>Vision models</div>
+            </div>
+            <div class="project-sidebar-block">
+              <div class="sidebar-label">Approach</div>
+              <div class="sidebar-value">LLM parsing<br>+ regex validation<br>= hybrid accuracy<br>at scale</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CONTACT ═══════════════════════════ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Contact</div>
+      <div class="contact-big">Let's<br><span>Build</span><br>Something.</div>
+      <div class="contact-sub">
+        Open to SDE roles, backend engineering positions,<br>
+        and interesting system design conversations.
+      </div>
+    </div>
+
+    <div class="contact-links reveal reveal-delay-2">
+      <a class="contact-link" href="mailto:srivastavayash017@gmail.com">
+        <div>
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">srivastavayash017@gmail.com</span>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a class="contact-link" href="https://linkedin.com/in/yash-srivastava-8b0253176" target="_blank">
+        <div>
+          <span class="contact-link-label">LinkedIn</span>
+          <span class="contact-link-value">yash-srivastava-8b0253176</span>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a class="contact-link" href="https://github.com/srivastavayash" target="_blank">
+        <div>
+          <span class="contact-link-label">GitHub</span>
+          <span class="contact-link-value">github.com/srivastavayash</span>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a class="contact-link" href="https://leetcode.com/SrivastavaYash017" target="_blank">
+        <div>
+          <span class="contact-link-label">LeetCode</span>
+          <span class="contact-link-value">SrivastavaYash017</span>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">© 2025 Yash Srivastava · Built with intention.</div>
+  <div class="footer-right">Delhi, India · <span>Available for opportunities</span></div>
+</footer>
+
+<script>
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * .12;
+    ry += (my - ry) * .12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .project-header, .stack-chip').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '16px'; cursor.style.height = '16px';
+      ring.style.width = '52px'; ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px';
+      ring.style.width = '36px'; ring.style.height = '36px';
+    });
+  });
+
+  // ── NAV SCROLL ──
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── REVEAL ON SCROLL ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ── PROJECTS ACCORDION ──
+  function toggleProject(header) {
+    const item = header.closest('.project-item');
+    const isOpen = item.classList.contains('open');
+
+    // close all
+    document.querySelectorAll('.project-item.open').forEach(el => {
+      if (el !== item) el.classList.remove('open');
+    });
+
+    item.classList.toggle('open', !isOpen);
+  }
+
+  // ── STAT COUNTER ANIMATION ──
+  function animateValue(el, start, end, duration, isFloat, suffix) {
+    let startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = start + (end - start) * eased;
+      el.textContent = (isFloat ? val.toFixed(2) : Math.floor(val)) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const nums = e.target.querySelectorAll('.stat-num');
+        const data = [
+          { start: 0, end: 6,    float: false, suffix: '+' },
+          { start: 0, end: 1,    float: false, suffix: '+' },
+          { start: 8, end: 9.34, float: true,  suffix: '' },
+          { start: 30, end: 2,   float: false, suffix: 's' },
+        ];
+        // for the <2s one we special-case
+        nums.forEach((num, i) => {
+          if (i === 3) {
+            // count down from 30 to 2
+            animateValue(num, 30, 2, 1400, false, 's');
+            setTimeout(() => { num.textContent = '<2s'; }, 1500);
+          } else if (data[i]) {
+            animateValue(num, data[i].start, data[i].end, 1200, data[i].float, data[i].suffix);
+          }
+        });
+        statsObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  const statsEl = document.querySelector('.hero-stats');
+  if (statsEl) statsObserver.observe(statsEl);
+</script>
+</body>
+</html>
