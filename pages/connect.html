@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect — Yash Srivastava</title>
+  <meta name="description"
+    content="Get in touch with Yash Srivastava. Open to SDE roles and backend engineering positions." />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <style>
+    .connect-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* ── CONTACT LINKS ── */
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--link-color, var(--green));
+      transform: scaleY(0);
+      transition: transform .3s;
+    }
+
+    .contact-link:hover {
+      border-color: rgba(255, 255, 255, .1);
+      transform: translateX(6px);
+    }
+
+    .contact-link:hover::before {
+      transform: scaleY(1);
+    }
+
+    .contact-link-left {}
+
+    .contact-link-platform {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray3);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .contact-link-handle {
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      transition: color .2s;
+    }
+
+    .contact-link:hover .contact-link-handle {
+      color: var(--link-color, var(--green));
+    }
+
+    .contact-link-arrow {
+      font-size: 16px;
+      color: var(--link-color, var(--green));
+      transition: transform .2s;
+      opacity: .4;
+    }
+
+    .contact-link:hover .contact-link-arrow {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+
+    /* ── FORM ── */
+    .contact-form-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-form-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .form-title {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 6px;
+    }
+
+    .form-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      letter-spacing: .06em;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 11px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--white);
+      outline: none;
+      transition: border-color .2s;
+      border-radius: 2px;
+      appearance: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: rgba(0, 255, 136, .4);
+      background: var(--bg4);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--gray3);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+
+    .form-select option {
+      background: var(--bg2);
+      color: var(--white);
+    }
+
+    .form-submit {
+      width: 100%;
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      padding: 14px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .2s;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .form-submit:hover {
+      background: var(--green2);
+      transform: translateY(-1px);
+    }
+
+    .form-submit:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-status {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-align: center;
+      display: none;
+    }
+
+    .form-status.success {
+      color: var(--green);
+      display: block;
+    }
+
+    .form-status.error {
+      color: var(--red);
+      display: block;
+    }
+
+    /* ── AVAILABILITY ── */
+    .availability-card {
+      background: var(--bg2);
+      border: 1px solid rgba(0, 255, 136, .2);
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .availability-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--green), transparent);
+    }
+
+    .avail-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .avail-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .avail-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .avail-details {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      line-height: 1.9;
+    }
+
+    /* ── OPEN TO SECTION ── */
+    .open-to-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .open-to-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray1);
+    }
+
+    .open-to-item::before {
+      content: '✓';
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    @media (max-width: 900px) {
+      .connect-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .open-to-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="page-hero">
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-orb"
+      style="width:500px;height:500px;background:var(--green);top:-150px;right:-100px;opacity:.07;"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+      <div class="eyebrow reveal">Reach Out</div>
+      <h1 class="page-title reveal reveal-d1">Let's <span class="ghost">Connect</span></h1>
+      <p class="page-subtitle reveal reveal-d2">
+        Open to SDE roles, backend engineering positions,<br>
+        and interesting system design conversations.
+      </p>
+    </div>
+  </section>
+
+  <div class="section">
+    <div class="connect-layout">
+
+      <!-- LEFT: Availability + Links -->
+      <div>
+
+        <!-- AVAILABILITY -->
+        <div class="availability-card reveal">
+          <div class="avail-title">// Current Status</div>
+          <div class="avail-status">
+            <div class="avail-dot"></div>
+            Open to Opportunities
+          </div>
+          <div class="avail-details">
+            Full-time · Contract · Freelance<br>
+            Preferred: Backend / Full Stack / AI-ML roles<br>
+            Location: Delhi, India · Open to remote
+          </div>
+        </div>
+
+        <!-- OPEN TO -->
+        <div style="margin-bottom:20px;" class="reveal reveal-d1">
+          <div
+            style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">
+            // Open To</div>
+          <div class="open-to-grid">
+            <div class="open-to-item">SDE Roles (Backend)</div>
+            <div class="open-to-item">Full Stack Engineer</div>
+            <div class="open-to-item">AI/ML Engineer</div>
+            <div class="open-to-item">Platform Engineer</div>
+            <div class="open-to-item">System Design consult</div>
+            <div class="open-to-item">Technical collaboration</div>
+          </div>
+        </div>
+
+        <!-- CONTACT LINKS -->
+        <div
+          style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;"
+          class="reveal reveal-d2">// Find Me On</div>
+        <div class="contact-links reveal reveal-d2">
+          <a class="contact-link" href="mailto:srivastavayash017@gmail.com" style="--link-color:var(--green);">
+            <div class="contact-link-left">
+              <span class="contact-link-platform">Email</span>
+              <span class="contact-link-handle">srivastavayash017@gmail.com</span>
+            </div>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="https://linkedin.com/in/yash-srivastava-8b0253176" target="_blank"
+            style="--link-color:var(--blue);">
+            <div class="contact-link-left">
+              <span class="contact-link-platform">LinkedIn</span>
+              <span class="contact-link-handle">yash-srivastava-8b0253176</span>
+            </div>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="https://github.com/srivastavayash" target="_blank"
+            style="--link-color:var(--white);">
+            <div class="contact-link-left">
+              <span class="contact-link-platform">GitHub</span>
+              <span class="contact-link-handle">github.com/srivastavayash</span>
+            </div>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="https://leetcode.com/SrivastavaYash017" target="_blank"
+            style="--link-color:var(--yellow);">
+            <div class="contact-link-left">
+              <span class="contact-link-platform">LeetCode</span>
+              <span class="contact-link-handle">SrivastavaYash017</span>
+            </div>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="/resume.pdf" target="_blank" style="--link-color:var(--purple);">
+            <div class="contact-link-left">
+              <span class="contact-link-platform">Resume</span>
+              <span class="contact-link-handle">Download PDF</span>
+            </div>
+            <span class="contact-link-arrow">↓</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: FORM -->
+      <div class="contact-form-wrap reveal reveal-d1">
+        <div class="form-title">Send a Message</div>
+        <div class="form-sub">Typical response within 24–48 hours.</div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-name">Name</label>
+          <input class="form-input" id="contact-name" type="text" placeholder="Your name" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-email">Email</label>
+          <input class="form-input" id="contact-email" type="email" placeholder="your@email.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-type">Regarding</label>
+          <select class="form-select" id="contact-type">
+            <option value="job">Job / Role Opportunity</option>
+            <option value="freelance">Freelance / Contract Work</option>
+            <option value="collab">Technical Collaboration</option>
+            <option value="system-design">System Design Discussion</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Message</label>
+          <textarea class="form-textarea" id="contact-message" placeholder="What's on your mind?" required></textarea>
+        </div>
+
+        <button class="form-submit" id="form-submit" onclick="submitForm()">
+          <span id="submit-text">Send Message →</span>
+          <span id="submit-spinner" style="display:none;">
+            <div class="spinner" style="width:14px;height:14px;border-width:2px;"></div>
+          </span>
+        </button>
+
+        <div class="form-status" id="form-status"></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <script src="/assets/js/shell.js"></script>
+  <script>
+    YashOS.init({ activePage: 'connect' });
+
+    // ── API CONFIG ──
+    // After deploying the worker, set this to your actual worker URL.
+    // Get it from: Cloudflare Dashboard → Workers & Pages → your worker → Settings
+    // Format: https://yashos-worker.<your-subdomain>.workers.dev
+    const API_BASE = 'https://yashos-worker.srivastavayash017.workers.dev/';  // ← PASTE YOUR WORKER URL HERE (leave empty to use mailto fallback)
+
+    async function submitForm() {
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const type = document.getElementById('contact-type').value;
+      const message = document.getElementById('contact-message').value.trim();
+      const status = document.getElementById('form-status');
+      const btn = document.getElementById('form-submit');
+
+      // Validation
+      if (!name || !email || !message) {
+        status.textContent = '✕ Please fill in all fields.';
+        status.className = 'form-status error';
+        return;
+      }
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(email)) {
+        status.textContent = '✕ Invalid email address.';
+        status.className = 'form-status error';
+        return;
+      }
+
+      // Submit
+      btn.disabled = true;
+      document.getElementById('submit-text').style.display = 'none';
+      document.getElementById('submit-spinner').style.display = 'block';
+      status.className = 'form-status';
+
+      // If no API_BASE set, fall back to mailto
+      if (!API_BASE) {
+        const subject = encodeURIComponent(`[yashOS] ${type} from ${name}`);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`);
+        window.location.href = `mailto:srivastavayash017@gmail.com?subject=${subject}&body=${body}`;
+        btn.disabled = false;
+        document.getElementById('submit-text').style.display = 'block';
+        document.getElementById('submit-spinner').style.display = 'none';
+        status.textContent = '✓ Opening your email client...';
+        status.className = 'form-status success';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, type, message }),
+        });
+        if (res.ok) {
+          status.textContent = '✓ Message sent. I\'ll get back to you within 48 hours.';
+          status.className = 'form-status success';
+          document.getElementById('contact-name').value = '';
+          document.getElementById('contact-email').value = '';
+          document.getElementById('contact-message').value = '';
+        } else {
+          throw new Error('Server error');
+        }
+      } catch (err) {
+        status.textContent = '✕ Something went wrong. Email srivastavayash017@gmail.com directly.';
+        status.className = 'form-status error';
+      }
+
+      btn.disabled = false;
+      document.getElementById('submit-text').style.display = 'block';
+      document.getElementById('submit-spinner').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

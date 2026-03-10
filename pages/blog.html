@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Yash Srivastava</title>
+  <meta name="description"
+    content="Engineering deep dives, system design thinking, and learning documentation by Yash Srivastava." />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <style>
+    .blog-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ── SEARCH BAR ── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 12px 16px 12px 40px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--white);
+      outline: none;
+      transition: border-color .2s;
+      border-radius: 4px;
+    }
+
+    .search-input:focus {
+      border-color: rgba(0, 255, 136, .4);
+    }
+
+    .search-input::placeholder {
+      color: var(--gray3);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray3);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    /* ── TAG FILTERS ── */
+    .tag-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .tag-filter-btn {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      color: var(--gray2);
+      background: transparent;
+      cursor: pointer;
+      border-radius: 100px;
+      transition: all .2s;
+    }
+
+    .tag-filter-btn:hover,
+    .tag-filter-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(0, 255, 136, .05);
+    }
+
+    /* ── BLOG LIST ── */
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .blog-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 28px;
+      text-decoration: none;
+      display: block;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--green);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .3s;
+    }
+
+    .blog-card:hover {
+      border-color: rgba(0, 255, 136, .2);
+      transform: translateX(4px);
+    }
+
+    .blog-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .blog-card.hidden {
+      display: none;
+    }
+
+    .blog-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .blog-date {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray3);
+      letter-spacing: .1em;
+    }
+
+    .blog-read-time {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray3);
+      letter-spacing: .08em;
+    }
+
+    .blog-card-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      color: var(--white);
+      margin-bottom: 10px;
+      transition: color .2s;
+    }
+
+    .blog-card:hover .blog-card-title {
+      color: var(--green);
+    }
+
+    .blog-card-excerpt {
+      font-size: 13px;
+      color: var(--gray2);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .blog-card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* ── FEATURED BLOG ── */
+    .blog-featured {
+      background: var(--bg2);
+      border: 1px solid rgba(0, 255, 136, .2);
+      padding: 36px;
+      margin-bottom: 24px;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      transition: all .25s;
+    }
+
+    .blog-featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .blog-featured:hover {
+      border-color: rgba(0, 255, 136, .4);
+      transform: translateY(-2px);
+    }
+
+    .blog-featured-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .blog-featured-title {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--white);
+      margin-bottom: 12px;
+      transition: color .2s;
+    }
+
+    .blog-featured:hover .blog-featured-title {
+      color: var(--green);
+    }
+
+    .blog-featured-excerpt {
+      font-size: 14px;
+      color: var(--gray1);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    /* ── SIDEBAR ── */
+    .blog-sidebar {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-widget {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .sidebar-widget-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sidebar-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+
+    .sidebar-stat:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-stat-key {
+      color: var(--gray2);
+    }
+
+    .sidebar-stat-val {
+      color: var(--white);
+    }
+
+    /* ── EMPTY / LOADING ── */
+    #blog-loading {
+      text-align: center;
+      padding: 60px;
+    }
+
+    #blog-empty {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .blog-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="page-hero">
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-orb"
+      style="width:400px;height:400px;background:var(--purple);top:-100px;right:0;opacity:.12;"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+      <div class="eyebrow reveal">Writing</div>
+      <h1 class="page-title reveal reveal-d1">Tech <span class="ghost">Blogs</span></h1>
+      <p class="page-subtitle reveal reveal-d2">
+        Engineering deep dives, system design thinking, and learning documentation.<br>
+        Written to understand, not to impress.
+      </p>
+    </div>
+  </section>
+
+  <div class="section">
+    <div class="blog-layout">
+
+      <div>
+        <!-- SEARCH -->
+        <div class="search-wrap reveal">
+          <span class="search-icon">⌕</span>
+          <input class="search-input" id="search-input" type="text" placeholder="Search articles..." />
+        </div>
+
+        <!-- TAG FILTERS -->
+        <div class="tag-filters reveal reveal-d1" id="tag-filters">
+          <button class="tag-filter-btn active" data-tag="all">All</button>
+          <button class="tag-filter-btn" data-tag="system-design">System Design</button>
+          <button class="tag-filter-btn" data-tag="ai-ml">AI / ML</button>
+          <button class="tag-filter-btn" data-tag="backend">Backend</button>
+          <button class="tag-filter-btn" data-tag="auth">Auth</button>
+          <button class="tag-filter-btn" data-tag="database">Database</button>
+          <button class="tag-filter-btn" data-tag="performance">Performance</button>
+        </div>
+
+        <!-- FEATURED -->
+        <!-- TODO: fetch featured post from /api/blogs?featured=true -->
+        <a class="blog-featured reveal reveal-d2" href="/blog/building-llm-orchestration-pipeline" id="featured-post">
+          <div class="blog-featured-label">★ Featured Post</div>
+          <div class="blog-featured-title">Building a Multi-Model LLM Orchestration Pipeline in Production</div>
+          <div class="blog-featured-excerpt">
+            How I went from 30 seconds to under 2 seconds end-to-end response time by decoupling STT, LLM, and TTS into
+            async parallel pipelines — with fallback routing, retry logic, and structured output enforcement.
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;gap:6px;">
+              <span class="tag green">AI / ML</span>
+              <span class="tag">Performance</span>
+              <span class="tag">Node.js</span>
+            </div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--gray2);">8 min read · Mar 2025</div>
+          </div>
+        </a>
+
+        <!-- BLOG LIST -->
+        <div id="blog-loading" class="reveal">
+          <div class="spinner"></div>
+        </div>
+        <div class="blog-list reveal reveal-d3" id="blog-list" style="display:none;">
+          <!-- TODO: Populated by /api/blogs endpoint -->
+        </div>
+        <div class="empty-state" id="blog-empty">
+          <div class="empty-state-icon">✍</div>
+          <div class="empty-state-title">No posts yet</div>
+          <div class="empty-state-sub">Articles coming soon. Check back later.</div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="blog-sidebar">
+        <div class="sidebar-widget reveal">
+          <div class="sidebar-widget-title">// Stats</div>
+          <div class="sidebar-stat">
+            <span class="sidebar-stat-key">Total posts</span>
+            <span class="sidebar-stat-val" id="stat-total">0</span>
+          </div>
+          <div class="sidebar-stat">
+            <span class="sidebar-stat-key">Total reads</span>
+            <span class="sidebar-stat-val" id="stat-reads">—</span>
+          </div>
+          <div class="sidebar-stat">
+            <span class="sidebar-stat-key">Latest</span>
+            <span class="sidebar-stat-val" id="stat-latest">—</span>
+          </div>
+        </div>
+
+        <div class="sidebar-widget reveal reveal-d1">
+          <div class="sidebar-widget-title">// Topics</div>
+          <div class="sidebar-tag-cloud">
+            <span class="tag green">System Design</span>
+            <span class="tag purple">AI / ML</span>
+            <span class="tag blue">Backend</span>
+            <span class="tag yellow">Auth</span>
+            <span class="tag">Database</span>
+            <span class="tag">Performance</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">TypeScript</span>
+          </div>
+        </div>
+
+        <div class="sidebar-widget reveal reveal-d2">
+          <div class="sidebar-widget-title">// RSS / Subscribe</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--gray2);line-height:1.8;">
+            New posts drop when there's something worth writing.<br>
+            No fluff. No frequency pressure.
+          </div>
+          <a class="btn ghost sm" href="/rss.xml" style="margin-top:14px;display:inline-flex;">RSS Feed →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/assets/js/shell.js"></script>
+  <script>
+    YashOS.init({ activePage: 'blog' });
+
+    /* ── MOCK DATA (replace with API call) ── */
+    const BLOG_POSTS = [
+      {
+        id: 1,
+        slug: 'jwt-rotation-strategy',
+        title: 'JWT Rotation Strategy: Why Stateless Auth Isn\'t Actually Stateless',
+        excerpt: 'Breaking down the trade-off between true statelessness and token revocation — and how we solved it with Redis blacklisting + rotating refresh tokens in Authnex.',
+        tags: ['auth', 'backend', 'system-design'],
+        date: 'Feb 2025',
+        readTime: '6 min',
+      },
+      {
+        id: 2,
+        slug: 'multi-tenant-rbac-schema',
+        title: 'Designing Multi-Tenant RBAC: The Junction Table Architecture',
+        excerpt: 'One user, multiple organizations, distinct roles per tenant — without duplicating accounts. A deep dive into the schema design and query patterns that make this work.',
+        tags: ['database', 'backend', 'auth'],
+        date: 'Jan 2025',
+        readTime: '9 min',
+      },
+      {
+        id: 3,
+        slug: 'concurrency-safe-attendance',
+        title: 'Concurrency-Safe Attendance: How a Single DB Constraint Eliminated 20% of Discrepancies',
+        excerpt: 'Under parallel HTTP requests, attendance records were duplicating. The fix wasn\'t a lock — it was a UNIQUE constraint and proper transaction isolation.',
+        tags: ['database', 'backend', 'performance'],
+        date: 'Dec 2024',
+        readTime: '5 min',
+      },
+      {
+        id: 4,
+        slug: 'imap-deduplication',
+        title: 'Building Email Deduplication: 3 Layers of Defense Against Duplicate Tickets',
+        excerpt: 'IMAP is messy. Re:/Fwd mutations, duplicate Message-IDs, race conditions. Here\'s the 3-layer dedup strategy that killed duplicate tickets in our Helpdesk system.',
+        tags: ['backend', 'system-design'],
+        date: 'Nov 2024',
+        readTime: '7 min',
+      },
+    ];
+
+    function renderTag(t) {
+      const colorMap = { 'ai-ml': 'purple', 'system-design': 'blue', 'auth': 'yellow', 'performance': 'green', 'database': 'blue', 'backend': 'green' };
+      const c = colorMap[t] || '';
+      return `<span class="tag ${c}">${t.replace(/-/g, ' ')}</span>`;
+    }
+
+    function renderBlogs(posts) {
+      const list = document.getElementById('blog-list');
+      if (!posts.length) {
+        document.getElementById('blog-empty').style.display = 'block';
+        return;
+      }
+      list.innerHTML = posts.map(p => `
+    <a class="blog-card" href="/blog/${p.slug}" data-tags="${p.tags.join(' ')}">
+      <div class="blog-card-meta">
+        <span class="blog-date">${p.date}</span>
+        <span style="color:var(--gray3);font-family:var(--mono);font-size:9px;">·</span>
+        <span class="blog-read-time">${p.readTime} read</span>
+      </div>
+      <div class="blog-card-title">${p.title}</div>
+      <div class="blog-card-excerpt">${p.excerpt}</div>
+      <div class="blog-card-tags">${p.tags.map(renderTag).join('')}</div>
+    </a>
+  `).join('');
+      list.style.display = 'flex';
+      document.getElementById('stat-total').textContent = posts.length;
+      document.getElementById('stat-latest').textContent = posts[0]?.date || '—';
+    }
+
+    /* ── INIT ── */
+    // TODO: Replace with: fetch('/api/blogs').then(r=>r.json()).then(renderBlogs)
+    document.getElementById('blog-loading').style.display = 'none';
+    renderBlogs(BLOG_POSTS);
+
+    /* ── SEARCH ── */
+    document.getElementById('search-input').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.blog-card').forEach(card => {
+        const title = card.querySelector('.blog-card-title').textContent.toLowerCase();
+        const excerpt = card.querySelector('.blog-card-excerpt').textContent.toLowerCase();
+        card.classList.toggle('hidden', q.length > 0 && !title.includes(q) && !excerpt.includes(q));
+      });
+    });
+
+    /* ── TAG FILTER ── */
+    document.querySelectorAll('.tag-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.tag;
+        document.querySelectorAll('.blog-card').forEach(card => {
+          const tags = (card.dataset.tags || '').split(' ');
+          card.classList.toggle('hidden', t !== 'all' && !tags.includes(t));
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

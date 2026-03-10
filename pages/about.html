@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Yash Srivastava</title>
+  <meta name="description" content="Full Stack Developer & AI/ML Engineer. Backend-heavy, systems-first." />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <style>
+    /* ── ABOUT-SPECIFIC ── */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-sidebar {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .profile-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .profile-avatar {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--green-dim), rgba(77, 158, 255, .1));
+      border: 1px solid rgba(0, 255, 136, .2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    .profile-name {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -.01em;
+    }
+
+    .profile-role {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: .1em;
+      margin-top: 4px;
+    }
+
+    .profile-location {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray2);
+      letter-spacing: .08em;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      background: rgba(0, 255, 136, .06);
+      border: 1px solid rgba(0, 255, 136, .2);
+      padding: 5px 10px;
+      border-radius: 100px;
+      margin-top: 14px;
+    }
+
+    .status-badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .sidebar-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .sidebar-block-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      text-decoration: none;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color .2s;
+    }
+
+    .sidebar-link:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-link:hover {
+      color: var(--green);
+    }
+
+    .sidebar-link-arrow {
+      color: var(--green);
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .sidebar-link:hover .sidebar-link-arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* ── CONTENT ── */
+    .about-content {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .content-block {}
+
+    .content-block-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .content-block-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray3);
+      letter-spacing: .08em;
+    }
+
+    .content-block-title {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
+    .prose {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--gray1);
+    }
+
+    .prose p+p {
+      margin-top: 18px;
+    }
+
+    .prose strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .prose a {
+      color: var(--green);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 255, 136, .3);
+      transition: border-color .2s;
+    }
+
+    .prose a:hover {
+      border-color: var(--green);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 20px;
+      padding-bottom: 36px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      background: var(--bg);
+      margin-top: 4px;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      margin-left: 9px;
+    }
+
+    .timeline-dot.dim {
+      border-color: var(--gray3);
+    }
+
+    .timeline-date {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray3);
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      margin-bottom: 4px;
+    }
+
+    .timeline-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--gray1);
+      line-height: 1.75;
+    }
+
+    /* ── SKILLS GRID ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .skill-category {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .skill-category-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* ── PHILOSOPHY CARDS ── */
+    .philosophy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .philosophy-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .philosophy-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--card-accent, var(--green)), transparent);
+    }
+
+    .philosophy-num {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--border2);
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
+
+    .philosophy-title {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -.01em;
+    }
+
+    .philosophy-desc {
+      font-size: 13px;
+      color: var(--gray2);
+      line-height: 1.7;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .about-sidebar {
+        position: static;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .philosophy-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="page-hero">
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-orb" style="width:400px;height:400px;background:var(--green);top:-100px;right:0;"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+      <div class="eyebrow reveal">Identity</div>
+      <h1 class="page-title reveal reveal-d1">Who I <span class="ghost">Am</span></h1>
+      <p class="page-subtitle reveal reveal-d2">
+        Full Stack Developer · AI/ML Engineer · Builder of production systems.<br>
+        Delhi, India — UTC+5:30.
+      </p>
+    </div>
+  </section>
+
+  <div class="section">
+    <div class="about-layout">
+
+      <!-- SIDEBAR -->
+      <div class="about-sidebar">
+        <div class="profile-card reveal">
+          <div class="profile-avatar">YS</div>
+          <div class="profile-name">Yash Srivastava</div>
+          <div class="profile-role">Full Stack Developer @ RPATech</div>
+          <div class="profile-location">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <circle cx="5" cy="4" r="2.5" stroke="currentColor" stroke-width="1" />
+              <path d="M5 10C5 10 9 6.5 9 4a4 4 0 0 0-8 0c0 2.5 4 6 4 6z" stroke="currentColor" stroke-width="1"
+                fill="none" />
+            </svg>
+            Delhi, India
+          </div>
+          <div class="status-badge">
+            <div class="status-badge-dot"></div>
+            Open to opportunities
+          </div>
+        </div>
+
+        <div class="sidebar-block reveal reveal-d1">
+          <div class="sidebar-block-title">// Quick Links</div>
+          <a class="sidebar-link" href="mailto:srivastavayash017@gmail.com">
+            Email <span class="sidebar-link-arrow">→</span>
+          </a>
+          <a class="sidebar-link" href="https://linkedin.com/in/yash-srivastava-8b0253176" target="_blank">
+            LinkedIn <span class="sidebar-link-arrow">→</span>
+          </a>
+          <a class="sidebar-link" href="https://github.com/srivastavayash" target="_blank">
+            GitHub <span class="sidebar-link-arrow">→</span>
+          </a>
+          <a class="sidebar-link" href="https://leetcode.com/SrivastavaYash017" target="_blank">
+            LeetCode <span class="sidebar-link-arrow">→</span>
+          </a>
+          <a class="sidebar-link" href="/resume.pdf" target="_blank">
+            Resume PDF <span class="sidebar-link-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="sidebar-block reveal reveal-d2">
+          <div class="sidebar-block-title">// Currently</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div
+              style="font-family:var(--mono);font-size:10px;color:var(--gray2);display:flex;align-items:center;gap:8px;">
+              <span style="color:var(--green)">▸</span> Building Authnex OAuth
+            </div>
+            <div
+              style="font-family:var(--mono);font-size:10px;color:var(--gray2);display:flex;align-items:center;gap:8px;">
+              <span style="color:var(--green)">▸</span> HRMS v2 performance layer
+            </div>
+            <div
+              style="font-family:var(--mono);font-size:10px;color:var(--gray2);display:flex;align-items:center;gap:8px;">
+              <span style="color:var(--yellow)">▸</span> Reading DDIA (Kleppmann)
+            </div>
+            <div
+              style="font-family:var(--mono);font-size:10px;color:var(--gray2);display:flex;align-items:center;gap:8px;">
+              <span style="color:var(--blue)">▸</span> DSA grind — Trees/Graphs
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="about-content">
+
+        <!-- BIO -->
+        <div class="content-block reveal">
+          <div class="content-block-header">
+            <span class="content-block-num">01</span>
+            <div class="content-block-title">The Summary</div>
+          </div>
+          <div class="prose">
+            <p>
+              I'm a <strong>Full Stack Developer at RPATech</strong> in Delhi, where I design and ship
+              production-grade SaaS platforms that actually have to work at scale — not just demo well.
+              My day-to-day spans centralized identity systems, enterprise HR automation, AI-powered
+              evaluation engines, and SLA-driven helpdesk infrastructure.
+            </p>
+            <p>
+              I think in <strong>systems, not features</strong>. Every platform I've built started with
+              schema design, failure modes, and concurrency constraints — not UI mockups. If I can't
+              explain the failure state of a system, it's not ready to ship.
+            </p>
+            <p>
+              My backend stack centers on <strong>TypeScript/Node.js and PHP (LAMP)</strong>, with MySQL
+              and Redis as the data layer. On the AI side, I've built multi-model LLM orchestration
+              pipelines in production — real retry logic, fallback routing, latency optimization, and
+              structured output enforcement. Not just wrapping API calls.
+            </p>
+            <p>
+              Right now I'm actively deepening expertise in <strong>distributed systems, message queues,
+                and event-driven architecture</strong> — bridging from application engineer to platform engineer.
+              Reading Designing Data-Intensive Applications. Building with intention.
+            </p>
+          </div>
+        </div>
+
+        <!-- PHILOSOPHY -->
+        <div class="content-block reveal">
+          <div class="content-block-header">
+            <span class="content-block-num">02</span>
+            <div class="content-block-title">Engineering Philosophy</div>
+          </div>
+          <div class="philosophy-grid">
+            <div class="philosophy-card" style="--card-accent:var(--green);">
+              <div class="philosophy-num">01</div>
+              <div class="philosophy-title">Systems First</div>
+              <div class="philosophy-desc">Design the schema, the failure modes, the concurrency model — before writing
+                a line of application code.</div>
+            </div>
+            <div class="philosophy-card" style="--card-accent:var(--blue);">
+              <div class="philosophy-num">02</div>
+              <div class="philosophy-title">Measure, Don't Guess</div>
+              <div class="philosophy-desc">Every optimization claim I make has a number behind it. 30s → 2s. 25% query
+                reduction. No vague assertions.</div>
+            </div>
+            <div class="philosophy-card" style="--card-accent:var(--purple);">
+              <div class="philosophy-num">03</div>
+              <div class="philosophy-title">Boring is Production-Ready</div>
+              <div class="philosophy-desc">Stable, well-understood tech beats trendy frameworks. Redis + MySQL +
+                battle-tested patterns ship features.</div>
+            </div>
+            <div class="philosophy-card" style="--card-accent:var(--yellow);">
+              <div class="philosophy-num">04</div>
+              <div class="philosophy-title">No Shortcuts in Auth</div>
+              <div class="philosophy-desc">Security isn't a feature. Token rotation, blacklisting, RBAC, rate limiting —
+                these are table stakes, not extras.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="content-block reveal">
+          <div class="content-block-header">
+            <span class="content-block-num">03</span>
+            <div class="content-block-title">Skills & Stack</div>
+          </div>
+          <div class="skills-grid">
+            <div class="skill-category">
+              <div class="skill-category-title">// Languages</div>
+              <div class="skill-list">
+                <span class="tag green">TypeScript</span>
+                <span class="tag green">JavaScript</span>
+                <span class="tag green">PHP</span>
+                <span class="tag">Python</span>
+                <span class="tag">SQL</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <div class="skill-category-title">// Backend</div>
+              <div class="skill-list">
+                <span class="tag blue">Node.js</span>
+                <span class="tag blue">REST APIs</span>
+                <span class="tag blue">LAMP Stack</span>
+                <span class="tag blue">OOP / MVC</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <div class="skill-category-title">// Data & Auth</div>
+              <div class="skill-list">
+                <span class="tag yellow">MySQL</span>
+                <span class="tag yellow">Redis</span>
+                <span class="tag yellow">JWT</span>
+                <span class="tag yellow">OAuth 2.0</span>
+                <span class="tag yellow">RBAC</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <div class="skill-category-title">// AI / ML</div>
+              <div class="skill-list">
+                <span class="tag purple">OpenAI</span>
+                <span class="tag purple">Gemini</span>
+                <span class="tag purple">Claude</span>
+                <span class="tag purple">Mistral</span>
+                <span class="tag purple">STT/TTS</span>
+                <span class="tag purple">OCR</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <div class="skill-category-title">// Infrastructure</div>
+              <div class="skill-list">
+                <span class="tag">Cloudflare</span>
+                <span class="tag">Workers / D1</span>
+                <span class="tag">CDN</span>
+                <span class="tag">Object Storage</span>
+              </div>
+            </div>
+            <div class="skill-category">
+              <div class="skill-category-title">// Frontend</div>
+              <div class="skill-list">
+                <span class="tag">HTML/CSS</span>
+                <span class="tag">Vanilla JS</span>
+                <span class="tag">Bootstrap</span>
+                <span class="tag">jQuery</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="content-block reveal">
+          <div class="content-block-header">
+            <span class="content-block-num">04</span>
+            <div class="content-block-title">Timeline</div>
+          </div>
+          <div class="timeline">
+
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div>
+                <div class="timeline-date">2023 – Present</div>
+                <div class="timeline-title">Full Stack Developer</div>
+                <div class="timeline-sub">RPATech · Delhi, India</div>
+                <div class="timeline-desc">
+                  Designing and shipping production SaaS platforms — Authnex (IAM), HRMS, AI Interview Engine,
+                  Helpdesk + SLA system, DocXtractor. Backend-heavy, systems-first engineering.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot dim"></div>
+              <div>
+                <div class="timeline-date">2020 – 2024</div>
+                <div class="timeline-title">B.Tech Information Technology</div>
+                <div class="timeline-sub">GGSIPU · Delhi — GPA: 9.34 / 10</div>
+                <div class="timeline-desc">
+                  Core CS fundamentals — OS, DBMS, networks, data structures, algorithms.
+                  Built multiple full-stack projects during college. Graduated with distinction.
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot dim"></div>
+              <div>
+                <div class="timeline-date">Ongoing</div>
+                <div class="timeline-title">Distributed Systems & Platform Engineering</div>
+                <div class="timeline-sub">Self-directed learning</div>
+                <div class="timeline-desc">
+                  DDIA (Kleppmann), Kafka fundamentals, message queues, event-driven architecture.
+                  Goal: bridge from application engineer to platform engineer.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/shell.js"></script>
+  <script>YashOS.init({ activePage: 'about' });</script>
+</body>
+
+</html>

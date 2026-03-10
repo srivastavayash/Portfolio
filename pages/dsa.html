@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSA Arena — Yash Srivastava</title>
+  <meta name="description" content="Algorithm journey — problems solved, patterns, complexity analysis." />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <style>
+    /* ── STATS ROW ── */
+    .dsa-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-bottom: 40px;
+    }
+
+    .dsa-stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .25s;
+    }
+
+    .dsa-stat-card:hover {
+      border-color: var(--border2);
+    }
+
+    .dsa-stat-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--stat-color, var(--green));
+    }
+
+    .dsa-stat-num {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 36px;
+      letter-spacing: -.02em;
+      color: var(--stat-color, var(--green));
+      line-height: 1;
+    }
+
+    .dsa-stat-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray2);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* ── LAYOUT ── */
+    .dsa-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── SIDEBAR (Topic List) ── */
+    .dsa-sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .dsa-topic-list {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .dsa-topic-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .dsa-topic-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .dsa-topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .dsa-topic-item:hover,
+    .dsa-topic-item.active {
+      color: var(--white);
+      background: var(--bg3);
+    }
+
+    .dsa-topic-item.active {
+      border-left: 2px solid var(--green);
+    }
+
+    .dsa-topic-count {
+      font-size: 9px;
+      color: var(--gray3);
+      background: var(--bg3);
+      padding: 2px 6px;
+      border-radius: 100px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .dsa-main {}
+
+    /* Filters */
+    .dsa-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .dsa-filter-group {
+      display: flex;
+      gap: 4px;
+    }
+
+    .dsa-filter-btn {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all .2s;
+    }
+
+    .dsa-filter-btn.easy {
+      color: var(--green);
+    }
+
+    .dsa-filter-btn.easy.active,
+    .dsa-filter-btn.easy:hover {
+      border-color: var(--green);
+      background: rgba(0, 255, 136, .08);
+      color: var(--green);
+    }
+
+    .dsa-filter-btn.medium {
+      color: var(--yellow);
+    }
+
+    .dsa-filter-btn.medium.active,
+    .dsa-filter-btn.medium:hover {
+      border-color: var(--yellow);
+      background: rgba(245, 197, 24, .08);
+      color: var(--yellow);
+    }
+
+    .dsa-filter-btn.hard {
+      color: var(--red);
+    }
+
+    .dsa-filter-btn.hard.active,
+    .dsa-filter-btn.hard:hover {
+      border-color: var(--red);
+      background: rgba(255, 77, 77, .08);
+      color: var(--red);
+    }
+
+    .dsa-filter-btn.all {
+      color: var(--gray2);
+    }
+
+    .dsa-filter-btn.all.active,
+    .dsa-filter-btn.all:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    /* Table */
+    .dsa-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+    }
+
+    .dsa-table thead tr {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dsa-table th {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--gray2);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .dsa-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--gray1);
+      vertical-align: top;
+    }
+
+    .dsa-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dsa-table tbody tr {
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .dsa-table tbody tr:hover {
+      background: var(--bg3);
+    }
+
+    .dsa-table tbody tr.hidden {
+      display: none;
+    }
+
+    .prob-name {
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -.01em;
+    }
+
+    .prob-name a {
+      color: inherit;
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .prob-name a:hover {
+      color: var(--green);
+    }
+
+    .diff-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .diff-easy {
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, .3);
+      background: rgba(0, 255, 136, .06);
+    }
+
+    .diff-medium {
+      color: var(--yellow);
+      border: 1px solid rgba(245, 197, 24, .3);
+      background: rgba(245, 197, 24, .06);
+    }
+
+    .diff-hard {
+      color: var(--red);
+      border: 1px solid rgba(255, 77, 77, .3);
+      background: rgba(255, 77, 77, .06);
+    }
+
+    .status-solved {
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .status-review {
+      color: var(--yellow);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    /* Problem detail drawer */
+    .prob-detail {
+      display: none;
+      background: var(--bg3);
+      border-top: 1px solid var(--border);
+    }
+
+    .prob-detail.open {
+      display: table-row;
+    }
+
+    .prob-detail td {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prob-detail-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .prob-approach {
+      font-size: 13px;
+      color: var(--gray1);
+      line-height: 1.75;
+    }
+
+    .prob-approach strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .prob-complexity {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .prob-complexity-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .complexity-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .complexity-row:last-child {
+      border-bottom: none;
+    }
+
+    .complexity-label {
+      color: var(--gray2);
+    }
+
+    .complexity-value {
+      color: var(--green);
+    }
+
+    /* Progress bar */
+    .progress-section {
+      margin-bottom: 32px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-outer {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: 2px;
+      transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
+      width: 0%;
+    }
+
+    @media (max-width: 900px) {
+      .dsa-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .dsa-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .dsa-sidebar {
+        position: static;
+      }
+
+      .prob-detail-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="page-hero">
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-orb" style="width:400px;height:400px;background:var(--red);top:-100px;right:0;opacity:.1;">
+    </div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+      <div class="eyebrow reveal">Competitive</div>
+      <h1 class="page-title reveal reveal-d1">DSA <span class="ghost">Arena</span></h1>
+      <p class="page-subtitle reveal reveal-d2">
+        Algorithm journey documented. Problems, patterns, complexity analysis.<br>
+        Grinding toward platform engineering fluency.
+      </p>
+    </div>
+  </section>
+
+  <div class="section">
+
+    <!-- STATS -->
+    <div class="dsa-stats">
+      <div class="dsa-stat-card reveal" style="--stat-color:var(--green);">
+        <div class="dsa-stat-num" id="stat-solved">0</div>
+        <div class="dsa-stat-label">Solved</div>
+      </div>
+      <div class="dsa-stat-card reveal reveal-d1" style="--stat-color:var(--green);">
+        <div class="dsa-stat-num" style="color:var(--green);" id="stat-easy">0</div>
+        <div class="dsa-stat-label">Easy</div>
+      </div>
+      <div class="dsa-stat-card reveal reveal-d2" style="--stat-color:var(--yellow);">
+        <div class="dsa-stat-num" id="stat-medium">0</div>
+        <div class="dsa-stat-label">Medium</div>
+      </div>
+      <div class="dsa-stat-card reveal reveal-d3" style="--stat-color:var(--red);">
+        <div class="dsa-stat-num" id="stat-hard">0</div>
+        <div class="dsa-stat-label">Hard</div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-section reveal">
+      <div class="progress-header">
+        <span>Overall Progress</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-outer">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="dsa-layout">
+
+      <!-- SIDEBAR -->
+      <div class="dsa-sidebar reveal">
+        <div class="dsa-topic-list">
+          <div class="dsa-topic-title">// Topics</div>
+          <div class="dsa-topic-item active" data-topic="all" onclick="filterTopic(this,'all')">
+            All <span class="dsa-topic-count" id="count-all">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="arrays" onclick="filterTopic(this,'arrays')">
+            Arrays <span class="dsa-topic-count" id="count-arrays">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="strings" onclick="filterTopic(this,'strings')">
+            Strings <span class="dsa-topic-count" id="count-strings">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="linkedlist" onclick="filterTopic(this,'linkedlist')">
+            Linked Lists <span class="dsa-topic-count" id="count-linkedlist">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="trees" onclick="filterTopic(this,'trees')">
+            Trees <span class="dsa-topic-count" id="count-trees">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="graphs" onclick="filterTopic(this,'graphs')">
+            Graphs <span class="dsa-topic-count" id="count-graphs">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="dp" onclick="filterTopic(this,'dp')">
+            Dynamic Prog. <span class="dsa-topic-count" id="count-dp">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="binary-search" onclick="filterTopic(this,'binary-search')">
+            Binary Search <span class="dsa-topic-count" id="count-binary-search">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="stack-queue" onclick="filterTopic(this,'stack-queue')">
+            Stack / Queue <span class="dsa-topic-count" id="count-stack-queue">0</span>
+          </div>
+          <div class="dsa-topic-item" data-topic="hashing" onclick="filterTopic(this,'hashing')">
+            Hashing <span class="dsa-topic-count" id="count-hashing">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="dsa-main">
+
+        <div class="dsa-filters reveal">
+          <div class="dsa-filter-group">
+            <button class="dsa-filter-btn all active" data-diff="all">All</button>
+            <button class="dsa-filter-btn easy" data-diff="easy">Easy</button>
+            <button class="dsa-filter-btn medium" data-diff="medium">Medium</button>
+            <button class="dsa-filter-btn hard" data-diff="hard">Hard</button>
+          </div>
+        </div>
+
+        <table class="dsa-table reveal reveal-d1" id="dsa-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Problem</th>
+              <th>Topic</th>
+              <th>Difficulty</th>
+              <th>Status</th>
+              <th>Platform</th>
+            </tr>
+          </thead>
+          <tbody id="dsa-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/shell.js"></script>
+  <script>
+    YashOS.init({ activePage: 'dsa' });
+
+    /* ── DATA ── */
+    // TODO: fetch from /api/dsa
+    const PROBLEMS = [
+      { id: 1, name: 'Two Sum', slug: 'two-sum', topic: 'arrays', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/two-sum/', approach: 'Used a hash map to store seen values. For each element, check if complement exists in map. O(n) time by trading space.', time: 'O(n)', space: 'O(n)' },
+      { id: 2, name: 'Best Time to Buy & Sell Stock', slug: 'best-time-buy-sell', topic: 'arrays', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/', approach: 'Single pass. Track min price seen so far. At each step, compute profit = price - minPrice. Update maxProfit.', time: 'O(n)', space: 'O(1)' },
+      { id: 3, name: 'Valid Anagram', slug: 'valid-anagram', topic: 'strings', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/valid-anagram/', approach: 'Count frequency of each character in both strings using a map. Compare maps.', time: 'O(n)', space: 'O(1)' },
+      { id: 4, name: 'Longest Substring Without Repeating Characters', slug: 'longest-substring', topic: 'strings', diff: 'medium', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', approach: 'Sliding window with a set. Expand right, shrink left when duplicate found. Track max window size.', time: 'O(n)', space: 'O(min(m,n))' },
+      { id: 5, name: 'Binary Search', slug: 'binary-search', topic: 'binary-search', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/binary-search/', approach: 'Classic implementation. Left + right pointers. Mid = left + (right-left)/2 to avoid overflow.', time: 'O(log n)', space: 'O(1)' },
+      { id: 6, name: 'Reverse Linked List', slug: 'reverse-linked-list', topic: 'linkedlist', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/reverse-linked-list/', approach: 'Iterative: prev=null, curr=head. At each step: store next, point curr.next=prev, advance both.', time: 'O(n)', space: 'O(1)' },
+      { id: 7, name: 'Merge Two Sorted Lists', slug: 'merge-sorted-lists', topic: 'linkedlist', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/merge-two-sorted-lists/', approach: 'Dummy head trick. Compare l1 and l2, attach smaller node. Move pointer. Attach remaining.', time: 'O(n+m)', space: 'O(1)' },
+      { id: 8, name: 'Invert Binary Tree', slug: 'invert-binary-tree', topic: 'trees', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/invert-binary-tree/', approach: 'Recursion: swap left and right children, then recursively invert both subtrees.', time: 'O(n)', space: 'O(h)' },
+      { id: 9, name: 'Maximum Depth of Binary Tree', slug: 'max-depth-tree', topic: 'trees', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/', approach: 'DFS recursion: max(depth(left), depth(right)) + 1. Base case: null node returns 0.', time: 'O(n)', space: 'O(h)' },
+      { id: 10, name: 'Number of Islands', slug: 'number-of-islands', topic: 'graphs', diff: 'medium', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/number-of-islands/', approach: 'DFS/BFS from each unvisited \'1\'. Mark all connected land as visited. Count starts of DFS.', time: 'O(m×n)', space: 'O(m×n)' },
+      { id: 11, name: 'Coin Change', slug: 'coin-change', topic: 'dp', diff: 'medium', status: 'review', platform: 'LeetCode', url: 'https://leetcode.com/problems/coin-change/', approach: 'Bottom-up DP. dp[i] = min coins to make amount i. For each coin, dp[i] = min(dp[i], dp[i-coin]+1).', time: 'O(S×n)', space: 'O(S)' },
+      { id: 12, name: 'Contains Duplicate', slug: 'contains-duplicate', topic: 'hashing', diff: 'easy', status: 'solved', platform: 'LeetCode', url: 'https://leetcode.com/problems/contains-duplicate/', approach: 'Add to set as we iterate. If element already in set, return true.', time: 'O(n)', space: 'O(n)' },
+    ];
+
+    function diffBadge(d) {
+      return `<span class="diff-badge diff-${d}">${d}</span>`;
+    }
+
+    let activeRows = [];
+
+    function renderTable(problems) {
+      const tbody = document.getElementById('dsa-tbody');
+      tbody.innerHTML = '';
+
+      // Update stats
+      const solved = problems.filter(p => p.status === 'solved').length;
+      const easy = problems.filter(p => p.diff === 'easy').length;
+      const medium = problems.filter(p => p.diff === 'medium').length;
+      const hard = problems.filter(p => p.diff === 'hard').length;
+      document.getElementById('stat-solved').textContent = solved;
+      document.getElementById('stat-easy').textContent = easy;
+      document.getElementById('stat-medium').textContent = medium;
+      document.getElementById('stat-hard').textContent = hard;
+
+      const pct = Math.round((solved / problems.length) * 100);
+      document.getElementById('progress-pct').textContent = pct + '%';
+      setTimeout(() => { document.getElementById('progress-fill').style.width = pct + '%'; }, 300);
+
+      // Update topic counts
+      const topics = ['all', 'arrays', 'strings', 'linkedlist', 'trees', 'graphs', 'dp', 'binary-search', 'stack-queue', 'hashing'];
+      topics.forEach(t => {
+        const el = document.getElementById('count-' + t);
+        if (el) el.textContent = t === 'all' ? problems.length : problems.filter(p => p.topic === t).length;
+      });
+      document.getElementById('count-all').textContent = problems.length;
+
+      // Render rows
+      problems.forEach((p, i) => {
+        const tr = document.createElement('tr');
+        tr.dataset.diff = p.diff;
+        tr.dataset.topic = p.topic;
+        tr.dataset.id = p.id;
+        tr.innerHTML = `
+      <td style="font-family:var(--mono);font-size:10px;color:var(--gray3);">${String(i + 1).padStart(2, '0')}</td>
+      <td><div class="prob-name"><a href="${p.url}" target="_blank" onclick="event.stopPropagation()">${p.name}</a></div></td>
+      <td><span class="tag">${p.topic.replace(/-/g, ' ')}</span></td>
+      <td>${diffBadge(p.diff)}</td>
+      <td><span class="${p.status === 'solved' ? 'status-solved' : 'status-review'}">${p.status === 'solved' ? '✓ Solved' : '↺ Review'}</span></td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--gray2);">${p.platform}</td>
+    `;
+        tr.addEventListener('click', () => toggleDetail(tr, p));
+        tbody.appendChild(tr);
+
+        // Detail row
+        const detailTr = document.createElement('tr');
+        detailTr.classList.add('prob-detail');
+        detailTr.dataset.parentId = p.id;
+        detailTr.innerHTML = `
+      <td colspan="6">
+        <div class="prob-detail-inner">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">// Approach</div>
+            <div class="prob-approach">${p.approach}</div>
+          </div>
+          <div class="prob-complexity">
+            <div class="prob-complexity-title">// Complexity</div>
+            <div class="complexity-row">
+              <span class="complexity-label">Time</span>
+              <span class="complexity-value">${p.time}</span>
+            </div>
+            <div class="complexity-row">
+              <span class="complexity-label">Space</span>
+              <span class="complexity-value">${p.space}</span>
+            </div>
+          </div>
+        </div>
+      </td>
+    `;
+        tbody.appendChild(detailTr);
+      });
+    }
+
+    function toggleDetail(tr, p) {
+      const detailTr = document.querySelector(`tr.prob-detail[data-parent-id="${p.id}"]`);
+      const isOpen = detailTr.classList.contains('open');
+      document.querySelectorAll('tr.prob-detail.open').forEach(r => r.classList.remove('open'));
+      if (!isOpen) detailTr.classList.add('open');
+    }
+
+    function filterTopic(el, topic) {
+      document.querySelectorAll('.dsa-topic-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      filterTable();
+    }
+
+    let activeDiff = 'all';
+    let activeTopic = 'all';
+
+    function filterTable() {
+      const topic = document.querySelector('.dsa-topic-item.active')?.dataset.topic || 'all';
+      document.querySelectorAll('#dsa-tbody tr:not(.prob-detail)').forEach(tr => {
+        const matchDiff = activeDiff === 'all' || tr.dataset.diff === activeDiff;
+        const matchTopic = topic === 'all' || tr.dataset.topic === topic;
+        tr.classList.toggle('hidden', !matchDiff || !matchTopic);
+      });
+      document.querySelectorAll('#dsa-tbody tr.prob-detail').forEach(tr => {
+        const pid = tr.dataset.parentId;
+        const parentHidden = document.querySelector(`#dsa-tbody tr[data-id="${pid}"]`)?.classList.contains('hidden');
+        if (parentHidden) tr.classList.remove('open');
+      });
+    }
+
+    document.querySelectorAll('.dsa-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.dsa-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeDiff = btn.dataset.diff;
+        filterTable();
+      });
+    });
+
+    // TODO: fetch('/api/dsa').then(r=>r.json()).then(renderTable)
+    renderTable(PROBLEMS);
+  </script>
+</body>
+
+</html>

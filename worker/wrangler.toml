@@ -1,0 +1,8 @@
+name = "yashos-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "yashos-db"
+database_id = "a9d3cada-99f7-4400-98b4-fbc85e579e0f"

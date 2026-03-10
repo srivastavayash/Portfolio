@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Yash Srivastava</title>
+  <meta name="description"
+    content="Production systems built by Yash Srivastava — IAM, HRMS, AI Pipelines, SaaS infrastructure." />
+  <link rel="stylesheet" href="/assets/css/shared.css" />
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      color: var(--gray2);
+      background: transparent;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all .2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(0, 255, 136, .05);
+    }
+
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .proj-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color .25s;
+    }
+
+    .proj-card:hover {
+      border-color: rgba(0, 255, 136, .25);
+    }
+
+    .proj-card.hidden {
+      display: none;
+    }
+
+    .proj-header {
+      display: grid;
+      grid-template-columns: 44px 1fr auto auto;
+      align-items: center;
+      gap: 20px;
+      padding: 26px 28px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .proj-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray3);
+      letter-spacing: .08em;
+    }
+
+    .proj-name {
+      font-family: var(--display);
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      transition: color .2s;
+    }
+
+    .proj-card:hover .proj-name {
+      color: var(--green);
+    }
+
+    .proj-tagline {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      margin-top: 4px;
+    }
+
+    .proj-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .proj-toggle {
+      font-family: var(--mono);
+      font-size: 16px;
+      color: var(--gray3);
+      width: 24px;
+      text-align: center;
+      transition: transform .3s, color .2s;
+    }
+
+    .proj-card.open .proj-toggle {
+      transform: rotate(45deg);
+      color: var(--green);
+    }
+
+    .proj-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .45s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .proj-card.open .proj-body {
+      max-height: 1200px;
+    }
+
+    .proj-body-inner {
+      border-top: 1px solid var(--border);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 32px;
+    }
+
+    .proj-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .proj-bullets li {
+      font-size: 13px;
+      color: var(--gray1);
+      line-height: 1.75;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .proj-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .proj-bullets li strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .proj-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .proj-meta-block {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .proj-meta-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .proj-meta-value {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray2);
+      line-height: 1.9;
+    }
+
+    .proj-links {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    /* Architecture diagram style */
+    .arch-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .arch-title {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--green);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .arch-flow {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--gray2);
+      line-height: 2;
+    }
+
+    .arch-flow .node {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      color: var(--white);
+      font-size: 10px;
+    }
+
+    .arch-flow .arrow {
+      color: var(--green);
+      margin: 0 6px;
+    }
+
+    @media (max-width: 768px) {
+      .proj-header {
+        grid-template-columns: 32px 1fr auto;
+      }
+
+      .proj-tags {
+        display: none;
+      }
+
+      .proj-body-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="page-hero">
+    <div class="page-hero-grid"></div>
+    <div class="page-hero-orb" style="width:500px;height:500px;background:var(--blue);top:-150px;right:-100px;"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+      <div class="eyebrow reveal">Production Work</div>
+      <h1 class="page-title reveal reveal-d1">What I've <span class="ghost">Built</span></h1>
+      <p class="page-subtitle reveal reveal-d2">
+        5 production systems. Real scale. Real constraints. Each one started with a schema, not a mockup.
+      </p>
+    </div>
+  </section>
+
+  <div class="section">
+
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="auth">Auth / IAM</button>
+      <button class="filter-btn" data-filter="ai">AI / ML</button>
+      <button class="filter-btn" data-filter="saas">SaaS / HRMS</button>
+      <button class="filter-btn" data-filter="infra">Infrastructure</button>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- AUTHNEX -->
+      <div class="proj-card reveal" data-categories="auth infra">
+        <div class="proj-header" onclick="toggleProj(this)">
+          <div class="proj-num">01</div>
+          <div>
+            <div class="proj-name">Authnex</div>
+            <div class="proj-tagline">Centralized Identity & Access Management Platform</div>
+          </div>
+          <div class="proj-tags">
+            <span class="tag green">TypeScript</span>
+            <span class="tag green">Node.js</span>
+            <span class="tag">Redis</span>
+            <span class="tag">Cloudflare</span>
+            <span class="tag">OAuth 2.0</span>
+          </div>
+          <div class="proj-toggle">+</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-inner">
+            <div>
+              <ul class="proj-bullets">
+                <li><strong>Centralized auth authority</strong> serving all internal SaaS products — replaced
+                  per-product login fragmentation with unified identity infrastructure.</li>
+                <li><strong>JWT + rotating refresh tokens</strong> — each token invalidated on use, preventing replay
+                  attacks. Access tokens intentionally short-lived.</li>
+                <li><strong>Multi-tenant RBAC</strong> via junction-table architecture — one user, multiple orgs,
+                  distinct roles per tenant. Zero account duplication.</li>
+                <li><strong>Hybrid session layer</strong> — Redis for sub-ms blacklist lookups + MySQL for durable
+                  persistence. Full-user session kill on suspicion.</li>
+                <li>Local JWT validation by consuming services — <strong>stateless, horizontally scalable</strong>, no
+                  auth bottleneck per request.</li>
+                <li>Cloudflare deployment with IP anomaly detection, rate limiting, OAuth 2.0, social login.</li>
+              </ul>
+              <div class="arch-box">
+                <div class="arch-title">// Architecture Flow</div>
+                <div class="arch-flow">
+                  <span class="node">Client</span>
+                  <span class="arrow">→</span>
+                  <span class="node">Cloudflare Edge</span>
+                  <span class="arrow">→</span>
+                  <span class="node">Authnex API</span>
+                  <span class="arrow">→</span>
+                  <span class="node">Redis Blacklist</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="arrow">+</span>
+                  <span class="node">MySQL (durable)</span><br>
+                  <span class="node">Consuming Service</span>
+                  <span class="arrow">→</span> validates JWT locally (stateless)
+                </div>
+              </div>
+            </div>
+            <div class="proj-meta">
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Stack</div>
+                <div class="proj-meta-value">TypeScript · Node.js<br>MySQL · Redis<br>Cloudflare Workers<br>JWT · OAuth
+                  2.0</div>
+              </div>
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Highlights</div>
+                <div class="proj-meta-value">Multi-tenant RBAC<br>Token rotation<br>Stateless validation<br>Blacklist
+                  caching</div>
+              </div>
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Status</div>
+                <div class="proj-meta-value" style="color:var(--green);">Production · Active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI INTERVIEW ENGINE -->
+      <div class="proj-card reveal reveal-d1" data-categories="ai">
+        <div class="proj-header" onclick="toggleProj(this)">
+          <div class="proj-num">02</div>
+          <div>
+            <div class="proj-name">AI Interview Engine</div>
+            <div class="proj-tagline">Autonomous Candidate Evaluation System</div>
+          </div>
+          <div class="proj-tags">
+            <span class="tag purple">LLM Orchestration</span>
+            <span class="tag purple">STT / TTS</span>
+            <span class="tag green">Node.js</span>
+            <span class="tag">OpenAI · Gemini</span>
+          </div>
+          <div class="proj-toggle">+</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-inner">
+            <div>
+              <ul class="proj-bullets">
+                <li><strong>30s → &lt;2s latency</strong> — root cause: tight sequential STT→LLM→TTS coupling. Decoupled
+                  pipeline, async execution, parallel API orchestration.</li>
+                <li><strong>Plugin-style model abstraction</strong> — runtime switching between OpenAI, Gemini, Claude,
+                  Mistral, ElevenLabs, self-hosted. Zero code change per swap.</li>
+                <li>Prompt orchestration with <strong>role-specific templates + incremental transcript context</strong>.
+                  Structured JSON output enforced with schema validation.</li>
+                <li><strong>Hybrid scoring engine</strong> — LLM eval + rule-based validation + weighted aggregation +
+                  confidence filtering. All async via concurrent workers.</li>
+                <li><strong>Extensible test engine</strong> — MCQ, subjective, AI-evaluated formats. Role-based dynamic
+                  test generation.</li>
+                <li>Retry + fallback routing — provider failure triggers automatic reroute to next in priority chain.
+                </li>
+              </ul>
+              <div class="arch-box">
+                <div class="arch-title">// Pipeline Architecture</div>
+                <div class="arch-flow">
+                  <span class="node">Audio Input</span>
+                  <span class="arrow">→</span>
+                  <span class="node">STT (async)</span>
+                  <span class="arrow">⟳</span>
+                  <span class="node">LLM (parallel)</span>
+                  <span class="arrow">⟳</span>
+                  <span class="node">TTS (async)</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="arrow">↓</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="node">Scoring Workers</span>
+                  <span class="arrow">→</span>
+                  <span class="node">Evaluation Report</span>
+                </div>
+              </div>
+            </div>
+            <div class="proj-meta">
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Models</div>
+                <div class="proj-meta-value">OpenAI · Gemini<br>Claude · Mistral<br>ElevenLabs<br>Self-hosted</div>
+              </div>
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Key Win</div>
+                <div class="proj-meta-value" style="color:var(--green);">30s pipeline<br>→ &lt;2s end-to-end</div>
+              </div>
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Status</div>
+                <div class="proj-meta-value" style="color:var(--green);">Production · Active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HRMS -->
+      <div class="proj-card reveal reveal-d2" data-categories="saas">
+        <div class="proj-header" onclick="toggleProj(this)">
+          <div class="proj-num">03</div>
+          <div>
+            <div class="proj-name">HRMS Platform</div>
+            <div class="proj-tagline">Multi-Tenant Enterprise Workforce Management</div>
+          </div>
+          <div class="proj-tags">
+            <span class="tag yellow">PHP</span>
+            <span class="tag yellow">MySQL</span>
+            <span class="tag">Redis</span>
+            <span class="tag">LAMP</span>
+          </div>
+          <div class="proj-toggle">+</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-inner">
+            <div>
+              <ul class="proj-bullets">
+                <li><strong>End-to-end workforce platform</strong> — recruitment, onboarding, attendance, leave,
+                  training, certifications, PMS, incentives, MIS reporting.</li>
+                <li><strong>Hierarchical org modeling</strong> — parent-child department schema, cycle-prevention
+                  constraints, structural integrity enforcement.</li>
+                <li><strong>Concurrency-safe attendance</strong> — DB-level UNIQUE(employee_id, attendance_date)
+                  prevents duplicates. 20% fewer discrepancies.</li>
+                <li><strong>Multi-reviewer PMS</strong> — weighted dynamic scoring, configurable aggregation, management
+                  override, evaluation locking.</li>
+                <li><strong>Rule-based incentive engine</strong> — formula-driven payouts tied to PMS. Rules as DB
+                  records = zero-code updates.</li>
+                <li>Indexed views + query tuning → <strong>~25% reduction</strong> in MIS analytics latency.</li>
+              </ul>
+            </div>
+            <div class="proj-meta">
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Stack</div>
+                <div class="proj-meta-value">PHP (LAMP) · MySQL<br>Redis · jQuery<br>PHPMailer · Bootstrap</div>
+              </div>
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Modules</div>
+                <div class="proj-meta-value">Recruitment · Attendance<br>Leave · Training<br>PMS · Incentives · MIS
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HELPDESK -->
+      <div class="proj-card reveal reveal-d3" data-categories="saas infra">
+        <div class="proj-header" onclick="toggleProj(this)">
+          <div class="proj-num">04</div>
+          <div>
+            <div class="proj-name">Helpdesk & SLA System</div>
+            <div class="proj-tagline">Multi-Tenant Ticketing with Full Email Engine</div>
+          </div>
+          <div class="proj-tags">
+            <span class="tag yellow">PHP</span>
+            <span class="tag">IMAP / SMTP</span>
+            <span class="tag yellow">MySQL</span>
+            <span class="tag">CDN</span>
+          </div>
+          <div class="proj-toggle">+</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-inner">
+            <div>
+              <ul class="proj-bullets">
+                <li><strong>Full IMAP integration</strong> from scratch — inbound ingestion, threading, reply handling,
+                  archiving, attachment management.</li>
+                <li><strong>3-layer deduplication</strong> — Message-ID + In-Reply-To (primary), subject normalization
+                  for Re:/Fwd (secondary), body validation (tertiary).</li>
+                <li><strong>Contract-based SLA engine</strong> — timezone-aware UTC deadline computation, 24×7.
+                  Immutably attached at ticket creation.</li>
+                <li>Attachments on object storage + CDN — decoupled from DB, served from edge.</li>
+                <li>Debugged complex concurrent IMAP duplicate suppression in production under load.</li>
+              </ul>
+            </div>
+            <div class="proj-meta">
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Hardest Part</div>
+                <div class="proj-meta-value">IMAP thread<br>reconstruction +<br>3-layer email<br>dedup in prod</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCXTRACTOR -->
+      <div class="proj-card reveal reveal-d4" data-categories="ai">
+        <div class="proj-header" onclick="toggleProj(this)">
+          <div class="proj-num">05</div>
+          <div>
+            <div class="proj-name">DocXtractor</div>
+            <div class="proj-tagline">Hybrid AI Document Extraction Pipeline</div>
+          </div>
+          <div class="proj-tags">
+            <span class="tag purple">Multi-model AI</span>
+            <span class="tag purple">OCR</span>
+            <span class="tag">Async Workers</span>
+          </div>
+          <div class="proj-toggle">+</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-body-inner">
+            <div>
+              <ul class="proj-bullets">
+                <li><strong>Multi-model abstraction</strong> — Gemini, OpenAI, Claude, Mistral, self-hosted vision
+                  models. Same plugin pattern as AI Interview Engine.</li>
+                <li><strong>Hybrid extraction</strong> — LLM semantic parsing for unstructured content +
+                  regex/rule-based deterministic validation for structured fields (PAN, GSTIN, invoice numbers).</li>
+                <li>Document-type templating — classified on ingestion, routed to per-template prompt + validation
+                  schema.</li>
+                <li>Structured JSON normalization at pipeline exit for reliable downstream integration.</li>
+                <li><strong>Async concurrent workers</strong> — bulk uploads parallel-processed. Synchronous threads
+                  never blocked.</li>
+              </ul>
+            </div>
+            <div class="proj-meta">
+              <div class="proj-meta-block">
+                <div class="proj-meta-label">Approach</div>
+                <div class="proj-meta-value">LLM parsing<br>+ regex validation<br>= hybrid accuracy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/assets/js/shell.js"></script>
+  <script>
+    YashOS.init({ activePage: 'projects' });
+
+    // Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.proj-card').forEach(card => {
+          const cats = (card.dataset.categories || '').split(' ');
+          card.classList.toggle('hidden', f !== 'all' && !cats.includes(f));
+        });
+      });
+    });
+
+    // Accordion
+    function toggleProj(header) {
+      const card = header.closest('.proj-card');
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.proj-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
+      card.classList.toggle('open', !isOpen);
+    }
+  </script>
+</body>
+
+</html>
