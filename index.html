@@ -257,6 +257,24 @@
       gap: 16px;
     }
 
+    .resume-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green);
+      text-decoration: none;
+      border: 1px solid rgba(0, 255, 136, .3);
+      padding: 7px 14px;
+      border-radius: 4px;
+      letter-spacing: .1em;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .resume-btn:hover {
+      background: rgba(0, 255, 136, .08);
+      border-color: var(--green);
+    }
+
     .terminal-btn {
       font-family: var(--mono);
       font-size: 10px;
@@ -1796,15 +1814,14 @@
   <!-- Mobile Nav -->
   <div class="mobile-nav" id="mobile-nav">
     <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
-    <a href="#hero" onclick="closeMobileNav()">Home</a>
-    <a href="about.php" onclick="closeMobileNav()">About</a>
-    <a href="projects.php" onclick="closeMobileNav()">Projects</a>
-    <a href="research.php" onclick="closeMobileNav()">Research</a>
-    <a href="blog.php" onclick="closeMobileNav()">Blog</a>
-    <a href="finance.php" onclick="closeMobileNav()">Finance</a>
-    <a href="dsa.php" onclick="closeMobileNav()">DSA</a>
-    <a href="lifelogs.php" onclick="closeMobileNav()">Life Logs</a>
-    <a href="connect.php" onclick="closeMobileNav()">Connect</a>
+    <a href="/" onclick="closeMobileNav()">Home</a>
+    <a href="/pages/about.html" onclick="closeMobileNav()">About</a>
+    <a href="/pages/projects.html" onclick="closeMobileNav()">Projects</a>
+    <a href="/pages/blog.html" onclick="closeMobileNav()">Blog</a>
+    <a href="/pages/dsa.html" onclick="closeMobileNav()">DSA</a>
+    <a href="/pages/finance.html" onclick="closeMobileNav()">Finance</a>
+    <a href="/pages/lifelogs.html" onclick="closeMobileNav()">Life Logs</a>
+    <a href="/pages/connect.html" onclick="closeMobileNav()">Connect</a>
   </div>
 
   <!-- ═══════════════ NAV ═══════════════ -->
@@ -1819,16 +1836,17 @@
     </a>
 
     <div class="nav-center">
-      <a href="#hero" class="active">Home</a>
-      <a href="about.php">About</a>
-      <a href="projects.php">Projects</a>
-      <a href="blog.php">Blog</a>
-      <a href="dsa.php">DSA</a>
-      <a href="finance.php">Finance</a>
-      <a href="connect.php">Connect</a>
+      <a href="/" class="active">Home</a>
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/projects.html">Projects</a>
+      <a href="/pages/blog.html">Blog</a>
+      <a href="/pages/dsa.html">DSA</a>
+      <a href="/pages/finance.html">Finance</a>
+      <a href="/pages/connect.html">Connect</a>
     </div>
 
     <div class="nav-right">
+      <a href="https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing" target="_blank" rel="noopener" class="resume-btn">Resume ↗</a>
       <button class="terminal-btn" onclick="openTerminal()">
         <div class="t-dot"></div>
         Terminal
@@ -1846,14 +1864,6 @@
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
 
-    <div class="hero-boot" id="hero-boot">
-      <span class="boot-line"><span class="prefix">$ </span><span class="ok">▶</span> booting <span
-          style="color:var(--green)">yashOS</span> v2.0...</span>
-      <span class="boot-line"><span class="prefix"> </span><span class="ok">✓</span> loading identity...</span>
-      <span class="boot-line"><span class="prefix"> </span><span class="ok">✓</span> initializing projects...</span>
-      <span class="boot-line"><span class="prefix"> </span><span class="ok">✓</span> mounting knowledge base...</span>
-      <span class="boot-line"><span class="prefix"> </span><span class="loading">◈</span> welcome.</span>
-    </div>
 
     <h1 class="hero-name">
       Yash<br>
@@ -1875,7 +1885,7 @@
 
     <div class="hero-actions">
       <a class="btn" href="#projects-preview">View Projects</a>
-      <a class="btn ghost" href="about.php">Read About</a>
+      <a class="btn ghost" href="/pages/about.html">Read About</a>
       <button class="btn terminal-launch" onclick="openTerminal()">
         <span style="font-size:14px">_</span> Open Terminal
       </button>
@@ -1962,7 +1972,7 @@
 
       <div class="modules-grid">
 
-        <a class="module-card accent-blue reveal reveal-d1" href="projects.php">
+        <a class="module-card accent-blue reveal reveal-d1" href="/pages/projects.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="2" y="2" width="6" height="6" stroke="#4d9eff" stroke-width="1.2" />
@@ -1978,7 +1988,7 @@
           <div class="module-arrow">View all projects →</div>
         </a>
 
-        <a class="module-card accent-purple reveal reveal-d2" href="research.php">
+        <a class="module-card accent-purple reveal reveal-d2" href="/pages/research.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 4h12M3 8h8M3 12h10M3 16h6" stroke="#a855f7" stroke-width="1.2" stroke-linecap="round" />
@@ -1991,7 +2001,7 @@
           <div class="module-arrow">Read research →</div>
         </a>
 
-        <a class="module-card accent-green reveal reveal-d3" href="blog.php">
+        <a class="module-card accent-green reveal reveal-d3" href="/pages/blog.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 2h10v14H4z" stroke="#00ff88" stroke-width="1.2" />
@@ -2004,7 +2014,7 @@
           <div class="module-arrow">Read blogs →</div>
         </a>
 
-        <a class="module-card accent-yellow reveal reveal-d1" href="finance.php">
+        <a class="module-card accent-yellow reveal reveal-d1" href="/pages/finance.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 14L6 9L9 11L13 5L16 7" stroke="#f5c518" stroke-width="1.2" stroke-linecap="round"
@@ -2017,7 +2027,7 @@
           <div class="module-arrow">View research →</div>
         </a>
 
-        <a class="module-card accent-red reveal reveal-d2" href="dsa.php">
+        <a class="module-card accent-red reveal reveal-d2" href="/pages/dsa.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 9L9 5L13 9" stroke="#ff4d4d" stroke-width="1.2" stroke-linecap="round" />
@@ -2032,7 +2042,7 @@
           <div class="module-arrow">Enter arena →</div>
         </a>
 
-        <a class="module-card accent-blue reveal reveal-d3" href="lifelogs.php">
+        <a class="module-card accent-blue reveal reveal-d3" href="/pages/lifelogs.html">
           <div class="module-icon">
             <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="9" cy="9" r="6" stroke="#4d9eff" stroke-width="1.2" />
@@ -2220,10 +2230,47 @@
         </div>
       </div>
 
+      <div class="project-item reveal">
+        <div class="project-header" onclick="toggleProject(this)">
+          <div class="project-num">05</div>
+          <div>
+            <div class="project-name">DocXtractor</div>
+            <div class="project-tagline">Hybrid AI Document Extraction Pipeline</div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">PHP</span>
+            <span class="tag">Vision LLMs</span>
+            <span class="tag">Multi-model</span>
+          </div>
+          <div class="project-toggle">+</div>
+        </div>
+        <div class="project-body">
+          <div class="project-body-inner">
+            <ul class="project-bullets">
+              <li><strong>Multi-model abstraction layer</strong> — same plugin pattern as AI Interview engine. Runtime switching between Gemini, OpenAI, Claude, Mistral, and self-hosted vision models.</li>
+              <li><strong>Hybrid extraction pipeline</strong> — LLM semantic parsing for unstructured content + regex/rule-based deterministic validation for structured fields (invoice numbers, PAN, GSTIN).</li>
+              <li><strong>Document-type templating</strong> — documents classified on ingestion, routed to appropriate extraction prompt and validation schema. Per-template prompt tuning.</li>
+              <li><strong>Async multi-worker ingestion</strong> — bulk document uploads processed in parallel without blocking synchronous request threads.</li>
+              <li>Structured JSON output normalization at pipeline exit for reliable downstream system integration.</li>
+            </ul>
+            <div>
+              <div class="project-meta-block">
+                <div class="meta-label">Stack</div>
+                <div class="meta-value">PHP · OpenAI · Gemini<br>Claude · Mistral<br>Self-hosted Vision<br>MySQL</div>
+              </div>
+              <div class="project-meta-block">
+                <div class="meta-label">Key Design</div>
+                <div class="meta-value">Same plugin<br>abstraction as AI<br>Interview engine</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div style="margin-top:32px; text-align:center;" class="reveal">
-      <a class="btn ghost" href="projects.php">View All Projects →</a>
+      <a class="btn ghost" href="/pages/projects.html">View All Projects →</a>
     </div>
   </section>
 
@@ -2338,7 +2385,7 @@
             architecture to bridge from application engineer to <strong>platform engineer</strong>.
           </p>
           <div style="margin-top:28px;">
-            <a class="btn ghost" href="about.php">Full Profile →</a>
+            <a class="btn ghost" href="/pages/about.html">Full Profile →</a>
           </div>
         </div>
       </div>
@@ -2420,12 +2467,12 @@
 
   <!-- ═══════════════ FOOTER ═══════════════ -->
   <footer>
-    <div class="footer-left">© 2025 Yash Srivastava · Built with intention, shipped with precision.</div>
+    <div class="footer-left">© 2026 Yash Srivastava · Built with intention, shipped with precision.</div>
     <div class="footer-right">
-      <a href="about.php">About</a>
-      <a href="projects.php">Projects</a>
-      <a href="blog.php">Blog</a>
-      <a href="connect.php">Connect</a>
+      <a href="/pages/about.html">About</a>
+      <a href="/pages/projects.html">Projects</a>
+      <a href="/pages/connect.html">Connect</a>
+      <a href="https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing" target="_blank" rel="noopener" style="color:var(--green)">Resume ↗</a>
       <div class="footer-status">
         <div class="status-dot"
           style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease-in-out infinite;">
@@ -2621,35 +2668,34 @@
       ],
 
       about: () => {
-        window.location.href = 'about.php';
+        window.location.href = '/pages/about.html';
         return [{ t: 'green', s: '  → Navigating to /about...' }];
       },
       projects: () => {
-        window.location.href = 'projects.php';
+        window.location.href = '/pages/projects.html';
         return [{ t: 'green', s: '  → Navigating to /projects...' }];
       },
       research: () => {
-        window.location.href = 'research.php';
-        return [{ t: 'green', s: '  → Navigating to /research...' }];
+        return [{ t: 'yellow', s: '  → Research page coming soon.' }];
       },
       blog: () => {
-        window.location.href = 'blog.php';
+        window.location.href = '/pages/blog.html';
         return [{ t: 'green', s: '  → Navigating to /blog...' }];
       },
       finance: () => {
-        window.location.href = 'finance.php';
+        window.location.href = '/pages/finance.html';
         return [{ t: 'green', s: '  → Navigating to /finance...' }];
       },
       dsa: () => {
-        window.location.href = 'dsa.php';
+        window.location.href = '/pages/dsa.html';
         return [{ t: 'green', s: '  → Navigating to /dsa...' }];
       },
       lifelogs: () => {
-        window.location.href = 'lifelogs.php';
+        window.location.href = '/pages/lifelogs.html';
         return [{ t: 'green', s: '  → Navigating to /lifelogs...' }];
       },
       contact: () => {
-        window.location.href = 'connect.php';
+        window.location.href = '/pages/connect.html';
         return [{ t: 'green', s: '  → Navigating to /connect...' }];
       },
 
@@ -2695,10 +2741,16 @@
         { t: 'blue', s: '  LinkedIn  → linkedin.com/in/yash-srivastava-8b0253176' },
         { t: 'blue', s: '  GitHub    → github.com/srivastavayash' },
         { t: 'yellow', s: '  LeetCode  → leetcode.com/SrivastavaYash017' },
+        { t: 'green', s: '  Resume    → drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ' },
         { t: 'blank' },
       ],
 
       clear: () => { termBody.innerHTML = ''; return []; },
+
+      resume: () => {
+        window.open('https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing', '_blank');
+        return [{ t: 'green', s: '  → Opening resume in Google Drive...' }];
+      },
 
       exit: () => {
         setTimeout(closeTerminal, 200);

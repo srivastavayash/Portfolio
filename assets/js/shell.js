@@ -8,14 +8,17 @@
 (function (window) {
   'use strict';
 
+  const RESUME_URL = 'https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing';
+
   const NAV_LINKS = [
     { href: '/', label: 'Home', key: 'home' },
-    { href: '/about', label: 'About', key: 'about' },
-    { href: '/projects', label: 'Projects', key: 'projects' },
-    { href: '/blog', label: 'Blog', key: 'blog' },
-    { href: '/dsa', label: 'DSA', key: 'dsa' },
-    { href: '/finance', label: 'Finance', key: 'finance' },
-    { href: '/connect', label: 'Connect', key: 'connect' },
+    { href: '/pages/about.html', label: 'About', key: 'about' },
+    { href: '/pages/projects.html', label: 'Projects', key: 'projects' },
+    { href: '/pages/blog.html', label: 'Blog', key: 'blog' },
+    { href: '/pages/dsa.html', label: 'DSA', key: 'dsa' },
+    { href: '/pages/finance.html', label: 'Finance', key: 'finance' },
+    { href: '/pages/lifelogs.html', label: 'Life Logs', key: 'lifelogs' },
+    { href: '/pages/connect.html', label: 'Connect', key: 'connect' },
   ];
 
   /* ── TERMINAL COMMANDS ── */
@@ -28,7 +31,6 @@
       { t: 'green', s: '  Navigation' },
       { t: 'output', s: '  about        →  Who Yash is' },
       { t: 'output', s: '  projects     →  All production work' },
-      { t: 'output', s: '  research     →  Technical research papers' },
       { t: 'output', s: '  blog         →  Engineering articles' },
       { t: 'output', s: '  finance      →  Stock research journal' },
       { t: 'output', s: '  dsa          →  Algorithm tracker' },
@@ -40,6 +42,7 @@
       { t: 'output', s: '  stats        →  Career numbers' },
       { t: 'output', s: '  whoami       →  Quick bio' },
       { t: 'output', s: '  links        →  All social / external links' },
+      { t: 'output', s: '  resume       →  Open resume (Google Drive)' },
       { t: 'blank' },
       { t: 'green', s: '  System' },
       { t: 'output', s: '  clear        →  Clear terminal' },
@@ -101,16 +104,20 @@
       { t: 'blue', s: '  LinkedIn  → linkedin.com/in/yash-srivastava-8b0253176' },
       { t: 'blue', s: '  GitHub    → github.com/srivastavayash' },
       { t: 'yellow', s: '  LeetCode  → leetcode.com/SrivastavaYash017' },
+      { t: 'green', s: '  Resume    → drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ' },
       { t: 'blank' },
     ],
-    about: () => { nav('/about'); return [{ t: 'green', s: '  → /about' }]; },
-    projects: () => { nav('/projects'); return [{ t: 'green', s: '  → /projects' }]; },
-    research: () => { nav('/research'); return [{ t: 'green', s: '  → /research' }]; },
-    blog: () => { nav('/blog'); return [{ t: 'green', s: '  → /blog' }]; },
-    finance: () => { nav('/finance'); return [{ t: 'green', s: '  → /finance' }]; },
-    dsa: () => { nav('/dsa'); return [{ t: 'green', s: '  → /dsa' }]; },
-    lifelogs: () => { nav('/lifelogs'); return [{ t: 'green', s: '  → /lifelogs' }]; },
-    contact: () => { nav('/connect'); return [{ t: 'green', s: '  → /connect' }]; },
+    resume: () => {
+      window.open(RESUME_URL, '_blank');
+      return [{ t: 'green', s: '  → Opening resume in Google Drive...' }];
+    },
+    about: () => { nav('/pages/about.html'); return [{ t: 'green', s: '  → /about' }]; },
+    projects: () => { nav('/pages/projects.html'); return [{ t: 'green', s: '  → /projects' }]; },
+    blog: () => { nav('/pages/blog.html'); return [{ t: 'green', s: '  → /blog' }]; },
+    finance: () => { nav('/pages/finance.html'); return [{ t: 'green', s: '  → /finance' }]; },
+    dsa: () => { nav('/pages/dsa.html'); return [{ t: 'green', s: '  → /dsa' }]; },
+    lifelogs: () => { nav('/pages/lifelogs.html'); return [{ t: 'green', s: '  → /lifelogs' }]; },
+    contact: () => { nav('/pages/connect.html'); return [{ t: 'green', s: '  → /connect' }]; },
     clear: () => { termBody && (termBody.innerHTML = ''); return []; },
     exit: () => { setTimeout(closeTerminal, 200); return [{ t: 'green', s: '  Closing...' }]; },
   };
@@ -128,7 +135,7 @@
 
   /* ── BUILD HTML ── */
   function buildShell(activePage) {
-    // Cursor
+    // Overlays + cursor
     document.body.insertAdjacentHTML('afterbegin', `
       <div class="noise-overlay"></div>
       <div class="scan-overlay"></div>
@@ -138,15 +145,18 @@
     `);
 
     // Mobile nav
+    const mobileLinks = NAV_LINKS.map(l =>
+      `<a href="${l.href}" onclick="YashOS.closeMobileNav()">${l.label}</a>`
+    ).join('');
     document.body.insertAdjacentHTML('afterbegin', `
       <div class="mobile-nav" id="mobile-nav">
         <button class="mobile-nav-close" onclick="YashOS.closeMobileNav()">✕</button>
-        ${NAV_LINKS.map(l => `<a href="${l.href}" onclick="YashOS.closeMobileNav()">${l.label}</a>`).join('')}
-        <a href="/lifelogs" onclick="YashOS.closeMobileNav()">Life Logs</a>
+        ${mobileLinks}
+        <a href="${RESUME_URL}" target="_blank" rel="noopener" onclick="YashOS.closeMobileNav()" style="color:var(--green)">Resume ↗</a>
       </div>
     `);
 
-    // Nav
+    // Desktop Nav
     const navLinksHTML = NAV_LINKS.map(l =>
       `<a href="${l.href}"${l.key === activePage ? ' class="active"' : ''}>${l.label}</a>`
     ).join('');
@@ -161,6 +171,7 @@
         </a>
         <div class="nav-center">${navLinksHTML}</div>
         <div class="nav-right">
+          <a href="${RESUME_URL}" target="_blank" rel="noopener" class="resume-btn" title="Download Resume">Resume ↗</a>
           <button class="terminal-btn" onclick="YashOS.openTerminal()">
             <div class="t-dot"></div>Terminal
           </button>
@@ -174,12 +185,12 @@
     // Footer
     document.body.insertAdjacentHTML('beforeend', `
       <footer>
-        <div class="footer-left">© 2025 Yash Srivastava · Built with intention, shipped with precision.</div>
+        <div class="footer-left">© 2026 Yash Srivastava · Built with intention, shipped with precision.</div>
         <div class="footer-right">
-          <a href="/about">About</a>
-          <a href="/projects">Projects</a>
-          <a href="/blog">Blog</a>
-          <a href="/connect">Connect</a>
+          <a href="/pages/about.html">About</a>
+          <a href="/pages/projects.html">Projects</a>
+          <a href="/pages/connect.html">Connect</a>
+          <a href="${RESUME_URL}" target="_blank" rel="noopener" style="color:var(--green)">Resume ↗</a>
           <div class="footer-status">
             <div style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease-in-out infinite;"></div>
             Available

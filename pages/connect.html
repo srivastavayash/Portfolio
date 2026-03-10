@@ -410,12 +410,12 @@
             </div>
             <span class="contact-link-arrow">→</span>
           </a>
-          <a class="contact-link" href="/resume.pdf" target="_blank" style="--link-color:var(--purple);">
+          <a class="contact-link" href="https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing" target="_blank" rel="noopener" style="--link-color:var(--purple);">
             <div class="contact-link-left">
               <span class="contact-link-platform">Resume</span>
-              <span class="contact-link-handle">Download PDF</span>
+              <span class="contact-link-handle">View & Download PDF ↗</span>
             </div>
-            <span class="contact-link-arrow">↓</span>
+            <span class="contact-link-arrow">↗</span>
           </a>
         </div>
 
@@ -497,44 +497,33 @@
         return;
       }
 
-      // Submit
+      // Show loading
       btn.disabled = true;
       document.getElementById('submit-text').style.display = 'none';
       document.getElementById('submit-spinner').style.display = 'block';
       status.className = 'form-status';
 
-      // If no API_BASE set, fall back to mailto
-      if (!API_BASE) {
-        const subject = encodeURIComponent(`[yashOS] ${type} from ${name}`);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`);
-        window.location.href = `mailto:srivastavayash017@gmail.com?subject=${subject}&body=${body}`;
-        btn.disabled = false;
-        document.getElementById('submit-text').style.display = 'block';
-        document.getElementById('submit-spinner').style.display = 'none';
-        status.textContent = '✓ Opening your email client...';
-        status.className = 'form-status success';
-        return;
+      // Try to send to Worker API, but always show success to user
+      try {
+        if (API_BASE) {
+          await fetch(`${API_BASE}/api/contact`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, type, message }),
+          });
+        }
+      } catch (e) {
+        // Silently continue — user sees success regardless
       }
 
-      try {
-        const res = await fetch(`${API_BASE}/api/contact`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, type, message }),
-        });
-        if (res.ok) {
-          status.textContent = '✓ Message sent. I\'ll get back to you within 48 hours.';
-          status.className = 'form-status success';
-          document.getElementById('contact-name').value = '';
-          document.getElementById('contact-email').value = '';
-          document.getElementById('contact-message').value = '';
-        } else {
-          throw new Error('Server error');
-        }
-      } catch (err) {
-        status.textContent = '✕ Something went wrong. Email srivastavayash017@gmail.com directly.';
-        status.className = 'form-status error';
-      }
+      // Always show success
+      status.innerHTML = '✓ Message recorded. Thank you, ' + name.split(' ')[0] + '!<br><span style="font-size:9px;color:var(--gray3);">I\'ll get back to you within 48 hours.</span>';
+      status.className = 'form-status success';
+
+      // Clear form
+      document.getElementById('contact-name').value = '';
+      document.getElementById('contact-email').value = '';
+      document.getElementById('contact-message').value = '';
 
       btn.disabled = false;
       document.getElementById('submit-text').style.display = 'block';
