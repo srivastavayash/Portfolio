@@ -8,7 +8,7 @@
 (function (window) {
   'use strict';
 
-  const RESUME_URL = 'https://drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ/view?usp=sharing';
+  const RESUME_URL = 'https://drive.google.com/file/d/13nmiIk8Cnp9zGIHeNmVFmNe8Vc36GEgN/view?usp=drive_link';
 
   const NAV_LINKS = [
     { href: '/', label: 'Home', key: 'home' },
@@ -104,7 +104,7 @@
       { t: 'blue', s: '  LinkedIn  → linkedin.com/in/yash-srivastava-8b0253176' },
       { t: 'blue', s: '  GitHub    → github.com/srivastavayash' },
       { t: 'yellow', s: '  LeetCode  → leetcode.com/SrivastavaYash017' },
-      { t: 'green', s: '  Resume    → drive.google.com/file/d/10lDm-uBw0VwUzHT2gi5AtJ79V8g0rTjZ' },
+      { t: 'green', s: '  Resume    → drive.google.com/file/d/13nmiIk8Cnp9zGIHeNmVFmNe8Vc36GEgN' },
       { t: 'blank' },
     ],
     resume: () => {
